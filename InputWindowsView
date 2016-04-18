@@ -1,0 +1,323 @@
+package tryCodes;
+
+
+
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+public class InputWindowsView extends JFrame{
+	public String selectCommand;
+	//selection
+	public JRadioButton mediaButton = new JRadioButton("Media");
+	public JRadioButton movieButton = new JRadioButton("Movie");
+	public JRadioButton seriesButton = new JRadioButton("Series");
+	public JRadioButton episodeButton = new JRadioButton("Episode");
+	public JRadioButton makersButton = new JRadioButton("Makers");
+	public JRadioButton actorsButton = new JRadioButton("Actors");
+	public JRadioButton directorsButton = new JRadioButton("Directors");
+	public JRadioButton producersButton = new JRadioButton("Producers");
+	public ButtonGroup buttons = new ButtonGroup();
+	
+	//file chooser
+	public JFileChooser filesChooser = new JFileChooser();
+	
+	//ouputArea
+	public JLabel outputLabel = new JLabel("Output Title");
+	public JTextArea outputArea = new JTextArea(20, 50);
+	
+	
+	//File Menu
+	public JMenu fileMenu = new JMenu("File");
+	public JMenuItem load = new JMenuItem("Load");
+	public JMenuItem save = new JMenuItem("Save");
+	public JMenuItem importItem = new JMenuItem("Import");
+	public JMenuItem export = new JMenuItem("Export");
+	
+	//Edit Menu
+	public JMenu editMenu = new JMenu("Edit");
+	public JMenuItem add = new JMenuItem("Add");
+	public JMenuItem edit = new JMenuItem("Edit");
+	public JMenuItem delete = new JMenuItem("Delete");
+	public JMenuItem clear = new JMenuItem("Clear");
+	public JMenuItem clearAll = new JMenuItem("Clear All");
+	
+	//Display Menu
+	public JMenu displayMenu = new JMenu("Display");
+	public JMenuItem pieChart = new JMenuItem("Pie Chart");
+	public JMenuItem histogram = new JMenuItem("Histogram");
+	public JMenuBar menuBar = new JMenuBar();
+	
+	//Enter View Compoenents
+	public JTextField titleField = new JTextField();
+	public JTextField startYearField = new JTextField();
+	public JTextField ronNumField = new JTextField();
+	public JTextField venueField = new JTextField();
+	public JButton addButton = new JButton("ADD");
+	public JButton noButton = new JButton("CANCEL");
+	public JFrame frame;
+	
+	public InputWindowsView(){
+		setTitle("MDb");
+		setLayout(new BorderLayout());
+		noButton.addActionListener(new CancelListener());
+		
+		
+		load.addActionListener(new LoadFilesListener());
+		load.setToolTipText("Read files which in using object I/O. ");
+		fileMenu.add(load);
+		
+		save.setToolTipText("Output data files using object I/O.");
+		save.setEnabled(false);
+		fileMenu.add(save);
+	
+		importItem.setToolTipText("Read data from text files.");
+		importItem.addActionListener(new SaveFilesListener());
+		fileMenu.add(importItem);
+		
+		export.setEnabled(false);
+		export.setToolTipText("Export data as text files.");
+		fileMenu.add(export);
+		menuBar.add(fileMenu);
+		
+		add.setToolTipText("It will active when you select which types of data you want to add.");
+		add.setEnabled(false);
+		add.addActionListener(new AddDataListener());
+		editMenu.add(add);
+		
+		
+		editMenu.add(edit);
+		editMenu.add(delete);
+		editMenu.add(clear);
+		editMenu.add(clearAll);
+		menuBar.add(editMenu);
+		
+		menuBar.add(displayMenu);
+		displayMenu.add(pieChart);
+		displayMenu.add(histogram);
+		add(menuBar, BorderLayout.PAGE_START);
+		
+		JPanel jplButtons = new JPanel(new GridLayout(9, 0, 5, 30));
+		JLabel seletLabel = new JLabel("    Seletion");
+		jplButtons.add(seletLabel);
+		
+		mediaButton.setActionCommand("Media");
+		movieButton.setActionCommand("Movie");
+		seriesButton.setActionCommand("Series");
+		episodeButton.setActionCommand("Episode");
+		makersButton.setActionCommand("Makers");
+		actorsButton.setActionCommand("Actors");
+		directorsButton.setActionCommand("Directors");
+		producersButton.setActionCommand("Producers");
+		
+		buttons.add(mediaButton);
+		buttons.add(movieButton);
+		buttons.add(seriesButton);
+		buttons.add(episodeButton);
+		buttons.add(makersButton);
+		buttons.add(actorsButton);
+		buttons.add(directorsButton);
+		buttons.add(producersButton);
+		
+		jplButtons.add(mediaButton);
+		jplButtons.add(movieButton);
+		jplButtons.add(seriesButton);
+		jplButtons.add(episodeButton);
+		jplButtons.add(makersButton);
+		jplButtons.add(actorsButton);
+		jplButtons.add(directorsButton);
+		jplButtons.add(producersButton);
+		
+		JScrollPane buttonScroll = new JScrollPane(jplButtons);
+		add(buttonScroll, BorderLayout.LINE_START);
+		
+		JPanel jplOutput = new JPanel(new GridBagLayout());
+		GridBagConstraints layoutConst = new GridBagConstraints();
+		layoutConst.gridx = 0;
+		layoutConst.gridy = 0;
+		layoutConst.anchor = GridBagConstraints.CENTER;
+		
+		jplOutput.add(outputLabel, layoutConst);
+		
+		
+		JScrollPane outputScroll = new JScrollPane(outputArea);
+		layoutConst = new GridBagConstraints();
+		layoutConst.gridx = 0;
+		layoutConst.gridy = 1;
+		layoutConst.fill = GridBagConstraints.BOTH;
+		layoutConst.weightx = 1.0;
+		layoutConst.weighty = 1.0;
+		layoutConst.anchor = GridBagConstraints.CENTER;
+		jplOutput.add(outputScroll, layoutConst);
+		add(jplOutput, BorderLayout.CENTER);
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);
+		pack();
+	}
+	
+	private class LoadFilesListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e){
+			filesChooser.setMultiSelectionEnabled(true);
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("OBJECT I/O FIELS", "txt", "text");
+			filesChooser.setFileFilter(filter);
+			filesChooser.showOpenDialog(load);
+		}
+	}
+	
+	
+	private class SaveFilesListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e){
+			filesChooser.setMultiSelectionEnabled(true);
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FIELS", "txt", "text");
+			filesChooser.setFileFilter(filter);
+			filesChooser.showOpenDialog(load);
+		}
+	}
+	
+	private class CancelListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e){
+			frame.dispose();		
+			}
+	}
+	
+	private class AddDataListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e){
+			JLabel label0;
+			JLabel label1;
+			JLabel label2;
+			JLabel label3;
+
+			
+
+			if(selectCommand == "Movie"){
+				frame = new JFrame("Add movie");
+				
+				JPanel jplEnter = new JPanel(new GridLayout(5, 0, 5, 10));
+				label0 = new JLabel("Title: ", JLabel.RIGHT);
+				titleField = new JTextField(20);
+				jplEnter.add(label0);
+				jplEnter.add(titleField);
+				
+				label1 = new JLabel("Year: ", JLabel.RIGHT);
+				startYearField = new JTextField(20);
+				jplEnter.add(label1);
+				jplEnter.add(startYearField);
+				
+				label2 = new JLabel("venue: ", JLabel.RIGHT);
+				venueField = new JTextField(20);
+				jplEnter.add(label2);
+				jplEnter.add(venueField);
+				
+				label3 = new JLabel("Roman Number: ", JLabel.RIGHT);
+				ronNumField = new JTextField(20);
+				jplEnter.add(label3);
+				jplEnter.add(ronNumField);
+				
+				jplEnter.add(addButton);
+				jplEnter.add(noButton);
+				frame.add(jplEnter);
+				frame.setVisible(true);
+				frame.pack();
+			}
+			else if(selectCommand == "Series"){
+				frame = new JFrame("Add Series");
+				JLabel ss = new JLabel("hahaha");
+				add(ss);
+				frame.setVisible(true);
+				frame.pack();
+				
+			}
+			else if(selectCommand == "Media"){
+				frame = new JFrame("Media");
+				frame.setVisible(true);
+				frame.pack();
+			}
+			
+		}
+	}
+	
+	
+	
+	public void addSeletActionListener(ActionListener e){
+		mediaButton.addActionListener(e);
+		movieButton.addActionListener(e);
+		seriesButton.addActionListener(e);
+		episodeButton.addActionListener(e);
+		makersButton.addActionListener(e);
+		actorsButton.addActionListener(e);
+		directorsButton.addActionListener(e);
+		producersButton.addActionListener(e);
+	}
+	
+	
+	
+	public void addAddDataActionListener(ActionListener e){
+		addButton.addActionListener(e);
+	}
+	public void addLoadFilesActionListener(ActionListener e){
+		filesChooser.addActionListener(e);
+	}
+	
+	public void addSaveActionListener(ActionListener e){
+		save.addActionListener(e);
+	}
+	
+	public void addImportActionListener(ActionListener e){
+		importItem.addActionListener(e);
+	}
+	
+	public void addExportActionListener(ActionListener e){
+		export.addActionListener(e);
+	}
+	
+	
+	public void addEditActionListener(ActionListener e){
+		edit.addActionListener(e);
+	}
+	
+	public void addDeleteActionListener(ActionListener e){
+		delete.addActionListener(e);
+	}
+	
+	public void addClearActionListener(ActionListener e){
+		clear.addActionListener(e);
+	}
+	
+	public void addClearAllActionListener(ActionListener e){
+		clearAll.addActionListener(e);
+	}
+	
+	public void addPieChartActionListener(ActionListener e){
+		pieChart.addActionListener(e);
+	}
+	
+	public void addhistogramActionListener(ActionListener e){
+		histogram.addActionListener(e);
+	}
+	
+	
+}

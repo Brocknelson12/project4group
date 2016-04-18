@@ -1,0 +1,38 @@
+package tryCodes;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+
+public class Controller {
+	private InputWindowsView input;
+	
+	
+	public void setView(InputWindowsView view){
+		input = view;
+		input.addSeletActionListener(new SelectListener());
+		input.addAddDataActionListener(new AddDataListener());
+	}
+	
+	private class SelectListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			input.add.setEnabled(true);
+			input.selectCommand = event.getActionCommand();
+			input.outputLabel.setText(event.getActionCommand());
+		}
+	}
+	
+	private class AddDataListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			if(input.selectCommand == input.movieButton.getActionCommand()){
+				System.out.println(input.titleField.getText());
+			}
+			if(input.selectCommand == input.mediaButton.getActionCommand()){
+				System.out.println(input.titleField.getText());
+			}
+		}
+	}
+}

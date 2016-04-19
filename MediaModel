@@ -1,0 +1,33 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+public class MediaModel {
+	private Show showOne;
+	private Creator creatorOne;
+	private ArrayList<ActionListener> actionListenerList;
+
+
+	public Creator getCreator() {
+		return null;
+	}
+	public Show getShow() {
+		return null;
+	}
+	public void setShow(){
+		
+	}
+	public void setCreator(){
+		
+	}
+
+	public void addActionListener(ActionListener I) {
+
+	}
+	public void removeActionListener(ActionListener I) {
+	}
+	public void processEvent(ActionEvent e){
+		
+	}
+
+}

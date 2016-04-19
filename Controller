@@ -4,6 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Controller {
 	private InputWindowsView input;
@@ -11,28 +14,112 @@ public class Controller {
 	
 	public void setView(InputWindowsView view){
 		input = view;
-		input.addSeletActionListener(new SelectListener());
-		input.addAddDataActionListener(new AddDataListener());
+		
+		input.addMovieActionListener(new AddMovieListener());
+		input.addLoadFilesActionListener(new LoadFilesListener());
 	}
 	
-	private class SelectListener implements ActionListener{
+	
+	private class LoadFilesListener implements ActionListener{
 		@Override
-		public void actionPerformed(ActionEvent event) {
-			input.add.setEnabled(true);
-			input.selectCommand = event.getActionCommand();
-			input.outputLabel.setText(event.getActionCommand());
+		public void actionPerformed(ActionEvent e){
+			input.filesChooser.setMultiSelectionEnabled(true);
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("OBJECT I/O FIELS", "txt", "text");
+			input.filesChooser.setFileFilter(filter);
+			input.filesChooser.showOpenDialog(input.load);
+			//TODO model load I/O Object files 
+			
 		}
 	}
 	
-	private class AddDataListener implements ActionListener{
+	
+	
+	private class AddMovieListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			if(input.selectCommand == input.movieButton.getActionCommand()){
-				System.out.println(input.titleField.getText());
+			String title = input.titleField.getText();
+			String year = "";
+			String ronNum = "";
+			String venue = "";
+			
+			year = input.startYearField.getText();
+			if(input.startYearField.getText().isEmpty()){
+				year = "????";
+				System.out.println(year);
 			}
-			if(input.selectCommand == input.mediaButton.getActionCommand()){
-				System.out.println(input.titleField.getText());
+			ronNum = input.ronNumField.getText();
+			venue = input.venueField.getText();
+			
+			//clean the field after add into model 
+			input.titleField.setText(null);
+			input.startYearField.setText(null);
+			input.ronNumField.setText(null);
+			input.venueField.setText(null);
+			JOptionPane.showMessageDialog(null, "Add successful.");
+			
+			//TODO add into model	
+			
+		}
+	}
+	
+	private class AddSeriesListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			String title = input.titleField.getText();
+			String startYear = "";
+			String endYear = "";
+			
+			startYear = input.startYearField.getText();
+			if(input.startYearField.getText().isEmpty()){
+				startYear = "????";
+				System.out.println("Series added");//test
 			}
+			endYear = input.endYearField.getText();
+			if(input.endYearField.getText().isEmpty()){
+				endYear = "????";
+			}
+			
+			//clean the field after add into model 
+			input.titleField.setText(null);
+			input.startYearField.setText(null);
+			input.endYearField.setText(null);
+			JOptionPane.showMessageDialog(null, "Add successful.");
+			
+			//TODO add into model	
+			
+		}
+	}
+	
+	private class AddEpisodeListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			String title = input.titleField.getText();
+			String episodeTitle = input.titleEpisodeField.getText();
+			String startYear = "";
+			String endYear = "";
+			String episodeNum = input.episodeNumField.getText();
+			
+			startYear = input.startYearField.getText();
+			if(input.startYearField.getText().isEmpty()){
+				startYear = "????";
+				System.out.println("Series added");//test
+			}
+			endYear = input.endYearField.getText();
+			if(input.endYearField.getText().isEmpty()){
+				endYear = "????";
+			}
+			
+			
+			//clean the field after add into model 
+			input.titleField.setText(null);
+			input.titleEpisodeField.setText(null);
+			input.startYearField.setText(null);
+			input.endYearField.setText(null);
+			input.episodeNumField.setText(null);
+			JOptionPane.showMessageDialog(null, "Add successful.");
+			
+			//TODO add into model	
+			
 		}
 	}
 }

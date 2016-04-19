@@ -71,28 +71,44 @@ public class InputWindowsView extends JFrame{
 	public JMenuItem histogram = new JMenuItem("Histogram");
 	public JMenuBar menuBar = new JMenuBar();
 	
-	//Enter View Compoenents
-	public JTextField titleField = new JTextField();
-	public JTextField titleEpisodeField = new JTextField();
-	public JTextField startYearField = new JTextField();
-	public JTextField endYearField = new JTextField();
-	public JTextField ronNumField = new JTextField();
-	public JTextField episodeNumField = new JTextField();
-	public JTextField venueField = new JTextField();
+	//list of frame
+	ArrayList<JFrame> frameList = new ArrayList<JFrame>(); 
 	
+	//Enter movie View Compoenents
+	public JTextField movieTitleField;
+	public JTextField movieYearField;
+	public JTextField ronNumField;
+	public JTextField venueField;
 	public JButton addMovieButton = new JButton("ADD");
+	
+	//Enter Series view compoenets
+	public JTextField seriesTitleField;
+	public JTextField seriesStartYearField;
+	public JTextField seriesEndYearField;
 	public JButton addSeriesButton = new JButton("ADD");
+	
+	
+	//Enter Episode view compoenets
+	public JTextField episodeSeriesTitleField;
+	public JTextField episodeStartYearField;
+	public JTextField episodeEndYearField;
+	public JTextField episodeTitleField;
+	public JTextField episodeNumField;
 	public JButton addEpisodeButton = new JButton("ADD");
 	
-	public JButton addActorButton = new JButton("ADD");
-	
-	public JButton noButton = new JButton("CANCEL");
-	public JFrame frame;
+	public JFrame frame = new JFrame();
 	
 	public InputWindowsView(){
+		JFrame movieFrame = new JFrame();
+		JFrame seriesFrame = new JFrame();
+		JFrame episodeFrame = new JFrame();
+		
+		addMovieFrame(movieFrame);
+		addSeriesFrame(seriesFrame);
+		addEpisodeFrame(episodeFrame);
+		
 		setTitle("MDb");
 		setLayout(new BorderLayout());
-		noButton.addActionListener(new CancelListener());
 		addSeletActionListener(new SelectListener());
 		
 		
@@ -117,6 +133,21 @@ public class InputWindowsView extends JFrame{
 		add.setEnabled(false);
 		add.addActionListener(new AddDataListener());
 		editMenu.add(add);
+		
+		edit.setEnabled(false);
+		edit.setToolTipText("Edit the exist data, it will be inative onece data loaded, imported or add.");
+		
+		delete.setEnabled(false);
+		delete.setToolTipText("Delet the exist related object and data from system, "
+				+ "it will be inative onece data loaded, imported or added.");
+		
+		clear.setEnabled(false);
+		clear.setToolTipText("Clean the exist related objects from system,"
+				+ " it will be inative onece data loaded, imported or added.");
+		
+		clearAll.setToolTipText("Clean all the exist objects. "
+				+ "it will be inative onece data loaded, imported or added.");
+		clearAll.setEnabled(false);
 		
 		
 		editMenu.add(edit);
@@ -206,6 +237,7 @@ public class InputWindowsView extends JFrame{
 	private class CancelListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e){
+			
 			frame.dispose();		
 			}
 	}
@@ -213,108 +245,14 @@ public class InputWindowsView extends JFrame{
 	private class AddDataListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e){
-			JLabel label0;
-			JLabel label1;
-			JLabel label2;
-			JLabel label3;
-			JLabel label4;
+			int i = 0;
+			for(JRadioButton b : buttonList){
+				if(b.isSelected()){
+					frameList.get(i - 1).setVisible(true);
+				}
+				i++;
+			}
 
-			if(movieButton.isSelected()){
-				frame = new JFrame("Add movie");
-				
-				JPanel jplEnter = new JPanel(new GridLayout(5, 0, 5, 10));
-				label0 = new JLabel("Title: ", JLabel.RIGHT);
-				titleField = new JTextField(20);
-				jplEnter.add(label0);
-				jplEnter.add(titleField);
-				
-				label1 = new JLabel("Year: ", JLabel.RIGHT);
-				startYearField = new JTextField(20);
-				jplEnter.add(label1);
-				jplEnter.add(startYearField);
-				
-				label2 = new JLabel("venue: ", JLabel.RIGHT);
-				venueField = new JTextField(20);
-				jplEnter.add(label2);
-				jplEnter.add(venueField);
-				
-				label3 = new JLabel("Roman Number: ", JLabel.RIGHT);
-				ronNumField = new JTextField(20);
-				jplEnter.add(label3);
-				jplEnter.add(ronNumField);
-				
-				jplEnter.add(addMovieButton);
-				jplEnter.add(noButton);
-				frame.add(jplEnter);
-				frame.setResizable(false);
-				frame.setVisible(true);
-				frame.pack();
-			}
-			else if(seriesButton.isSelected()){
-				frame = new JFrame("Add Series");
-				label0 = new JLabel("Series Title: ", JLabel.RIGHT);
-				label1 = new JLabel("Start Year: ", JLabel.RIGHT);
-				label2 = new JLabel("End Year: ", JLabel.RIGHT);
-				
-				JPanel jplEnter = new JPanel(new GridLayout(4, 0, 5, 10));
-				titleField = new JTextField(20);
-				jplEnter.add(label0);
-				jplEnter.add(titleField);
-				
-				startYearField = new JTextField(20);
-				jplEnter.add(label1);
-				jplEnter.add(startYearField);
-				
-				endYearField = new JTextField(20);
-				jplEnter.add(label2);
-				jplEnter.add(endYearField);
-				
-				jplEnter.add(addSeriesButton);
-				jplEnter.add(noButton);
-				
-				frame.add(jplEnter);
-				frame.setVisible(true);
-				frame.setResizable(false);
-				frame.pack();
-				
-			}
-			else if(episodeButton.isSelected()){
-				frame = new JFrame("Add Episode");
-				
-				JPanel jplEnter = new JPanel(new GridLayout(6, 0, 5, 10));
-				label0 = new JLabel("Series Title: ", JLabel.RIGHT);
-				titleField = new JTextField(20);
-				jplEnter.add(label0);
-				jplEnter.add(titleField);
-				
-				label1 = new JLabel("Episode Title: ", JLabel.RIGHT);
-				titleField = new JTextField(20);
-				jplEnter.add(label1);
-				jplEnter.add(titleEpisodeField);
-				
-				label2 = new JLabel("Start Year: ", JLabel.RIGHT);
-				startYearField = new JTextField(20);
-				jplEnter.add(label2);
-				jplEnter.add(startYearField);
-				
-				label3 = new JLabel("End Year: ", JLabel.RIGHT);
-				endYearField = new JTextField(20);
-				jplEnter.add(label3);
-				jplEnter.add(endYearField);
-				
-				label4 = new JLabel("Episode Number: ", JLabel.RIGHT);
-				episodeNumField = new JTextField(20);
-				jplEnter.add(label4);
-				jplEnter.add(episodeNumField);
-				
-				jplEnter.add(addEpisodeButton);
-				jplEnter.add(noButton);
-				frame.add(jplEnter);
-				frame.setResizable(false);
-				frame.setVisible(true);
-				frame.pack();
-			}
-			
 		}
 	}
 	
@@ -408,5 +346,112 @@ public class InputWindowsView extends JFrame{
 	
 	public void addhistogramActionListener(ActionListener e){
 		histogram.addActionListener(e);
+	}
+	
+	
+	public void addMovieFrame(JFrame frame){
+		frame = new JFrame("Add movie");
+		JButton noButton = new JButton("CANCEL");
+		noButton.addActionListener(new CancelListener());
+		
+		JPanel jplEnter = new JPanel(new GridLayout(5, 0, 5, 10));
+		JLabel titleLabel = new JLabel("Title: ", JLabel.RIGHT);
+		movieTitleField = new JTextField(20);
+		jplEnter.add(titleLabel);
+		jplEnter.add(movieTitleField);
+		
+		JLabel yearLabel = new JLabel("Year: ", JLabel.RIGHT);
+		movieYearField = new JTextField(20);
+		jplEnter.add(yearLabel);
+		jplEnter.add(movieYearField);
+		
+		JLabel venueLabel = new JLabel("venue: ", JLabel.RIGHT);
+		venueField = new JTextField(20);
+		jplEnter.add(venueLabel);
+		jplEnter.add(venueField);
+		
+		JLabel ronManlabel = new JLabel("Roman Number: ", JLabel.RIGHT);
+		ronNumField = new JTextField(20);
+		jplEnter.add(ronManlabel);
+		jplEnter.add(ronNumField);
+		
+		jplEnter.add(addMovieButton);
+		jplEnter.add(noButton);
+		frame.add(jplEnter);
+		frame.setResizable(false);
+		frame.pack();
+		
+		frameList.add(frame);
+	}
+	
+	public void addSeriesFrame (JFrame frame){
+		JButton noButton = new JButton("CANCEL");
+		noButton.addActionListener(new CancelListener());
+		
+		frame = new JFrame("Add Series");
+		JLabel titleLabel = new JLabel("Series Title: ", JLabel.RIGHT);
+		JLabel startYearLabel = new JLabel("Start Year: ", JLabel.RIGHT);
+		JLabel endYearLabel = new JLabel("End Year: ", JLabel.RIGHT);
+		
+		JPanel jplEnter = new JPanel(new GridLayout(4, 0, 5, 10));
+		seriesTitleField = new JTextField(20);
+		jplEnter.add(titleLabel);
+		jplEnter.add(seriesTitleField);
+		
+		seriesStartYearField = new JTextField(20);
+		jplEnter.add(startYearLabel);
+		jplEnter.add(seriesStartYearField);
+		
+		seriesEndYearField = new JTextField(20);
+		jplEnter.add(endYearLabel);
+		jplEnter.add(seriesEndYearField);
+		
+		jplEnter.add(addSeriesButton);
+		jplEnter.add(noButton);
+		
+		frame.add(jplEnter);
+		frame.setResizable(false);
+		frame.pack();
+		frameList.add(frame);
+	}
+	
+	public void addEpisodeFrame(JFrame frame){
+		JButton noButton = new JButton("CANCEL");
+		noButton.addActionListener(new CancelListener());
+
+		frame = new JFrame("Add Episode");
+		
+		JPanel jplEnter = new JPanel(new GridLayout(6, 0, 5, 10));
+		JLabel seriesTitleLabel = new JLabel("Series Title: ", JLabel.RIGHT);
+		episodeSeriesTitleField = new JTextField(20);
+		jplEnter.add(seriesTitleLabel);
+		jplEnter.add(episodeSeriesTitleField);
+		
+		JLabel episodeTitleabel = new JLabel("Episode Title: ", JLabel.RIGHT);
+		episodeTitleField = new JTextField(20);
+		jplEnter.add(episodeTitleabel);
+		jplEnter.add(episodeTitleField);
+		
+		JLabel startYearLabel = new JLabel("Start Year: ", JLabel.RIGHT);
+		episodeStartYearField = new JTextField(20);
+		jplEnter.add(startYearLabel);
+		jplEnter.add(episodeStartYearField);
+		
+		JLabel endYearLabel = new JLabel("End Year: ", JLabel.RIGHT);
+		episodeEndYearField = new JTextField(20);
+		jplEnter.add(endYearLabel);
+		jplEnter.add(episodeEndYearField);
+		
+		JLabel episodeLabel = new JLabel("Episode Number: ", JLabel.RIGHT);
+		episodeNumField = new JTextField(20);
+		jplEnter.add(episodeLabel);
+		jplEnter.add(episodeNumField);
+		
+		jplEnter.add(addEpisodeButton);
+		jplEnter.add(noButton);
+		frame.add(jplEnter);
+		frame.setResizable(true);
+		frame.pack();
+		frameList.add(frame);
 	}
 }

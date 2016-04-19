@@ -79,12 +79,14 @@ public class InputWindowsView extends JFrame{
 	public JTextField movieYearField;
 	public JTextField ronNumField;
 	public JTextField venueField;
+	JButton noMovieButton = new JButton("CANCEL");
 	public JButton addMovieButton = new JButton("ADD");
 	
 	//Enter Series view compoenets
 	public JTextField seriesTitleField;
 	public JTextField seriesStartYearField;
 	public JTextField seriesEndYearField;
+	JButton noSeriesButton = new JButton("CANCEL");	
 	public JButton addSeriesButton = new JButton("ADD");
 	
 	
@@ -94,15 +96,15 @@ public class InputWindowsView extends JFrame{
 	public JTextField episodeEndYearField;
 	public JTextField episodeTitleField;
 	public JTextField episodeNumField;
+	JButton noButton = new JButton("CANCEL");
 	public JButton addEpisodeButton = new JButton("ADD");
 	
-	public JFrame frame = new JFrame();
-	
+	//frames
+	JFrame movieFrame = new JFrame();
+	JFrame seriesFrame = new JFrame();
+	JFrame episodeFrame = new JFrame();
 	public InputWindowsView(){
-		JFrame movieFrame = new JFrame();
-		JFrame seriesFrame = new JFrame();
-		JFrame episodeFrame = new JFrame();
-		
+
 		addMovieFrame(movieFrame);
 		addSeriesFrame(seriesFrame);
 		addEpisodeFrame(episodeFrame);
@@ -237,9 +239,10 @@ public class InputWindowsView extends JFrame{
 	private class CancelListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e){
-			
-			frame.dispose();		
-			}
+			if(e.getActionCommand().equals("movie")) frameList.get(0).dispose();
+			if(e.getActionCommand().equals("series")) frameList.get(1).dispose();
+			if(e.getActionCommand().equals("episode")) frameList.get(2).dispose();
+		}
 	}
 	
 	private class AddDataListener implements ActionListener{
@@ -352,6 +355,7 @@ public class InputWindowsView extends JFrame{
 	public void addMovieFrame(JFrame frame){
 		frame = new JFrame("Add movie");
 		JButton noButton = new JButton("CANCEL");
+		noButton.setActionCommand("movie");
 		noButton.addActionListener(new CancelListener());
 		
 		JPanel jplEnter = new JPanel(new GridLayout(5, 0, 5, 10));
@@ -386,6 +390,7 @@ public class InputWindowsView extends JFrame{
 	
 	public void addSeriesFrame (JFrame frame){
 		JButton noButton = new JButton("CANCEL");
+		noButton.setActionCommand("series");
 		noButton.addActionListener(new CancelListener());
 		
 		frame = new JFrame("Add Series");
@@ -418,7 +423,8 @@ public class InputWindowsView extends JFrame{
 	public void addEpisodeFrame(JFrame frame){
 		JButton noButton = new JButton("CANCEL");
 		noButton.addActionListener(new CancelListener());
-
+		noButton.setActionCommand("episode");
+		
 		frame = new JFrame("Add Episode");
 		
 		JPanel jplEnter = new JPanel(new GridLayout(6, 0, 5, 10));

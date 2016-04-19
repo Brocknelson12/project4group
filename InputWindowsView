@@ -8,12 +8,14 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -36,6 +38,8 @@ public class InputWindowsView extends JFrame{
 	public JRadioButton actorsButton = new JRadioButton("Actors");
 	public JRadioButton directorsButton = new JRadioButton("Directors");
 	public JRadioButton producersButton = new JRadioButton("Producers");
+	public ArrayList<JRadioButton> buttonList = new ArrayList<JRadioButton>();
+	
 	public ButtonGroup buttons = new ButtonGroup();
 	
 	//file chooser
@@ -69,10 +73,19 @@ public class InputWindowsView extends JFrame{
 	
 	//Enter View Compoenents
 	public JTextField titleField = new JTextField();
+	public JTextField titleEpisodeField = new JTextField();
 	public JTextField startYearField = new JTextField();
+	public JTextField endYearField = new JTextField();
 	public JTextField ronNumField = new JTextField();
+	public JTextField episodeNumField = new JTextField();
 	public JTextField venueField = new JTextField();
-	public JButton addButton = new JButton("ADD");
+	
+	public JButton addMovieButton = new JButton("ADD");
+	public JButton addSeriesButton = new JButton("ADD");
+	public JButton addEpisodeButton = new JButton("ADD");
+	
+	public JButton addActorButton = new JButton("ADD");
+	
 	public JButton noButton = new JButton("CANCEL");
 	public JFrame frame;
 	
@@ -80,9 +93,9 @@ public class InputWindowsView extends JFrame{
 		setTitle("MDb");
 		setLayout(new BorderLayout());
 		noButton.addActionListener(new CancelListener());
+		addSeletActionListener(new SelectListener());
 		
 		
-		load.addActionListener(new LoadFilesListener());
 		load.setToolTipText("Read files which in using object I/O. ");
 		fileMenu.add(load);
 		
@@ -90,8 +103,9 @@ public class InputWindowsView extends JFrame{
 		save.setEnabled(false);
 		fileMenu.add(save);
 	
-		importItem.setToolTipText("Read data from text files.");
+		importItem.setToolTipText("Read data from text files.(It will be active after select radio button)");
 		importItem.addActionListener(new SaveFilesListener());
+		importItem.setEnabled(false);
 		fileMenu.add(importItem);
 		
 		export.setEnabled(false);
@@ -120,6 +134,9 @@ public class InputWindowsView extends JFrame{
 		JLabel seletLabel = new JLabel("    Seletion");
 		jplButtons.add(seletLabel);
 		
+		mediaButton.setToolTipText("Cannot be import or add");
+		makersButton.setToolTipText("Cannot be import or add");
+		
 		mediaButton.setActionCommand("Media");
 		movieButton.setActionCommand("Movie");
 		seriesButton.setActionCommand("Series");
@@ -129,14 +146,15 @@ public class InputWindowsView extends JFrame{
 		directorsButton.setActionCommand("Directors");
 		producersButton.setActionCommand("Producers");
 		
-		buttons.add(mediaButton);
-		buttons.add(movieButton);
-		buttons.add(seriesButton);
-		buttons.add(episodeButton);
-		buttons.add(makersButton);
-		buttons.add(actorsButton);
-		buttons.add(directorsButton);
-		buttons.add(producersButton);
+		buttonList.add(mediaButton);
+		buttonList.add(movieButton);
+		buttonList.add(seriesButton);
+		buttonList.add(episodeButton);
+		buttonList.add(makersButton);
+		buttonList.add(actorsButton);
+		buttonList.add(directorsButton);
+		buttonList.add(producersButton);
+		
 		
 		jplButtons.add(mediaButton);
 		jplButtons.add(movieButton);
@@ -175,24 +193,13 @@ public class InputWindowsView extends JFrame{
 		pack();
 	}
 	
-	private class LoadFilesListener implements ActionListener{
-		@Override
-		public void actionPerformed(ActionEvent e){
-			filesChooser.setMultiSelectionEnabled(true);
-			FileNameExtensionFilter filter = new FileNameExtensionFilter("OBJECT I/O FIELS", "txt", "text");
-			filesChooser.setFileFilter(filter);
-			filesChooser.showOpenDialog(load);
-		}
-	}
+	
 	
 	
 	private class SaveFilesListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e){
-			filesChooser.setMultiSelectionEnabled(true);
-			FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FIELS", "txt", "text");
-			filesChooser.setFileFilter(filter);
-			filesChooser.showOpenDialog(load);
+			//TODO Ouput Object I/O files
 		}
 	}
 	
@@ -210,10 +217,9 @@ public class InputWindowsView extends JFrame{
 			JLabel label1;
 			JLabel label2;
 			JLabel label3;
+			JLabel label4;
 
-			
-
-			if(selectCommand == "Movie"){
+			if(movieButton.isSelected()){
 				frame = new JFrame("Add movie");
 				
 				JPanel jplEnter = new JPanel(new GridLayout(5, 0, 5, 10));
@@ -237,22 +243,74 @@ public class InputWindowsView extends JFrame{
 				jplEnter.add(label3);
 				jplEnter.add(ronNumField);
 				
-				jplEnter.add(addButton);
+				jplEnter.add(addMovieButton);
 				jplEnter.add(noButton);
 				frame.add(jplEnter);
+				frame.setResizable(false);
 				frame.setVisible(true);
 				frame.pack();
 			}
-			else if(selectCommand == "Series"){
+			else if(seriesButton.isSelected()){
 				frame = new JFrame("Add Series");
-				JLabel ss = new JLabel("hahaha");
-				add(ss);
+				label0 = new JLabel("Series Title: ", JLabel.RIGHT);
+				label1 = new JLabel("Start Year: ", JLabel.RIGHT);
+				label2 = new JLabel("End Year: ", JLabel.RIGHT);
+				
+				JPanel jplEnter = new JPanel(new GridLayout(4, 0, 5, 10));
+				titleField = new JTextField(20);
+				jplEnter.add(label0);
+				jplEnter.add(titleField);
+				
+				startYearField = new JTextField(20);
+				jplEnter.add(label1);
+				jplEnter.add(startYearField);
+				
+				endYearField = new JTextField(20);
+				jplEnter.add(label2);
+				jplEnter.add(endYearField);
+				
+				jplEnter.add(addSeriesButton);
+				jplEnter.add(noButton);
+				
+				frame.add(jplEnter);
 				frame.setVisible(true);
+				frame.setResizable(false);
 				frame.pack();
 				
 			}
-			else if(selectCommand == "Media"){
-				frame = new JFrame("Media");
+			else if(episodeButton.isSelected()){
+				frame = new JFrame("Add Episode");
+				
+				JPanel jplEnter = new JPanel(new GridLayout(6, 0, 5, 10));
+				label0 = new JLabel("Series Title: ", JLabel.RIGHT);
+				titleField = new JTextField(20);
+				jplEnter.add(label0);
+				jplEnter.add(titleField);
+				
+				label1 = new JLabel("Episode Title: ", JLabel.RIGHT);
+				titleField = new JTextField(20);
+				jplEnter.add(label1);
+				jplEnter.add(titleEpisodeField);
+				
+				label2 = new JLabel("Start Year: ", JLabel.RIGHT);
+				startYearField = new JTextField(20);
+				jplEnter.add(label2);
+				jplEnter.add(startYearField);
+				
+				label3 = new JLabel("End Year: ", JLabel.RIGHT);
+				endYearField = new JTextField(20);
+				jplEnter.add(label3);
+				jplEnter.add(endYearField);
+				
+				label4 = new JLabel("Episode Number: ", JLabel.RIGHT);
+				episodeNumField = new JTextField(20);
+				jplEnter.add(label4);
+				jplEnter.add(episodeNumField);
+				
+				jplEnter.add(addEpisodeButton);
+				jplEnter.add(noButton);
+				frame.add(jplEnter);
+				frame.setResizable(false);
 				frame.setVisible(true);
 				frame.pack();
 			}
@@ -261,6 +319,32 @@ public class InputWindowsView extends JFrame{
 	}
 	
 	
+	private class SelectListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			String title = "";
+			int i = 0;
+			for(JRadioButton b : buttonList){
+				if(b.isSelected()){
+					title = title + b.getActionCommand() + ", ";
+					i++;
+				}
+			}
+			if(title.contains(",")) title = title.substring(0, title.length() - 2);
+			if(i == 0) title = "Output Titile";
+			outputLabel.setText(title);
+			
+			
+			if((!mediaButton.isSelected() && !makersButton.isSelected()) && i > 0){
+				add.setEnabled(true);
+				importItem.setEnabled(true);
+			}
+			else{
+				add.setEnabled(false);
+				importItem.setEnabled(false);
+			}
+		}
+	}
 	
 	public void addSeletActionListener(ActionListener e){
 		mediaButton.addActionListener(e);
@@ -273,13 +357,20 @@ public class InputWindowsView extends JFrame{
 		producersButton.addActionListener(e);
 	}
 	
-	
-	
-	public void addAddDataActionListener(ActionListener e){
-		addButton.addActionListener(e);
+	public void addMovieActionListener(ActionListener e){
+		addMovieButton.addActionListener(e);
 	}
+	
+	public void addSeriesActionListener(ActionListener e){
+		addSeriesButton.addActionListener(e);
+	}
+	
+	public void addEpisodeActionListener(ActionListener e){
+		addEpisodeButton.addActionListener(e);
+	}
+	
 	public void addLoadFilesActionListener(ActionListener e){
-		filesChooser.addActionListener(e);
+		load.addActionListener(e);
 	}
 	
 	public void addSaveActionListener(ActionListener e){
@@ -318,6 +409,4 @@ public class InputWindowsView extends JFrame{
 	public void addhistogramActionListener(ActionListener e){
 		histogram.addActionListener(e);
 	}
-	
-	
 }

@@ -24,11 +24,12 @@ public class Controller {
 		@Override
 		public void actionPerformed(ActionEvent e){
 			input.filesChooser.setMultiSelectionEnabled(true);
-			FileNameExtensionFilter filter = new FileNameExtensionFilter("OBJECT I/O FIELS", "txt", "text");
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("OBJECT I/O FIELS", "text", "text");
 			input.filesChooser.setFileFilter(filter);
 			input.filesChooser.showOpenDialog(input.load);
+			input.filesChooser.getSelectedFile();
 			//TODO model load I/O Object files 
-			
+
 		}
 	}
 	
@@ -37,13 +38,13 @@ public class Controller {
 	private class AddMovieListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			String title = input.titleField.getText();
+			String title = input.movieTitleField.getText();
 			String year = "";
 			String ronNum = "";
 			String venue = "";
 			
-			year = input.startYearField.getText();
-			if(input.startYearField.getText().isEmpty()){
+			year = input.movieYearField.getText();
+			if(input.movieYearField.getText().isEmpty()){
 				year = "????";
 				System.out.println(year);
 			}
@@ -51,8 +52,8 @@ public class Controller {
 			venue = input.venueField.getText();
 			
 			//clean the field after add into model 
-			input.titleField.setText(null);
-			input.startYearField.setText(null);
+			input.movieTitleField.setText(null);
+			input.movieYearField.setText(null);
 			input.ronNumField.setText(null);
 			input.venueField.setText(null);
 			JOptionPane.showMessageDialog(null, "Add successful.");
@@ -65,24 +66,24 @@ public class Controller {
 	private class AddSeriesListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			String title = input.titleField.getText();
+			String title = input.seriesTitleField.getText();
 			String startYear = "";
 			String endYear = "";
 			
-			startYear = input.startYearField.getText();
-			if(input.startYearField.getText().isEmpty()){
+			startYear = input.seriesStartYearField.getText();
+			if(input.seriesStartYearField.getText().isEmpty()){
 				startYear = "????";
 				System.out.println("Series added");//test
 			}
-			endYear = input.endYearField.getText();
-			if(input.endYearField.getText().isEmpty()){
+			endYear = input.seriesEndYearField.getText();
+			if(input.seriesEndYearField.getText().isEmpty()){
 				endYear = "????";
 			}
 			
 			//clean the field after add into model 
-			input.titleField.setText(null);
-			input.startYearField.setText(null);
-			input.endYearField.setText(null);
+			input.seriesTitleField.setText(null);
+			input.seriesStartYearField.setText(null);
+			input.seriesEndYearField.setText(null);
 			JOptionPane.showMessageDialog(null, "Add successful.");
 			
 			//TODO add into model	
@@ -93,28 +94,28 @@ public class Controller {
 	private class AddEpisodeListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			String title = input.titleField.getText();
-			String episodeTitle = input.titleEpisodeField.getText();
+			String title = input.episodeTitleField.getText();
+			String episodeTitle = input.episodeTitleField.getText();
 			String startYear = "";
 			String endYear = "";
 			String episodeNum = input.episodeNumField.getText();
 			
-			startYear = input.startYearField.getText();
-			if(input.startYearField.getText().isEmpty()){
+			startYear = input.episodeStartYearField.getText();
+			if(input.episodeStartYearField.getText().isEmpty()){
 				startYear = "????";
 				System.out.println("Series added");//test
 			}
-			endYear = input.endYearField.getText();
-			if(input.endYearField.getText().isEmpty()){
+			endYear = input.episodeEndYearField.getText();
+			if(input.episodeEndYearField.getText().isEmpty()){
 				endYear = "????";
 			}
 			
 			
 			//clean the field after add into model 
-			input.titleField.setText(null);
-			input.titleEpisodeField.setText(null);
-			input.startYearField.setText(null);
-			input.endYearField.setText(null);
+			input.episodeTitleField.setText(null);
+			input.episodeTitleField.setText(null);
+			input.episodeStartYearField.setText(null);
+			input.episodeEndYearField.setText(null);
 			input.episodeNumField.setText(null);
 			JOptionPane.showMessageDialog(null, "Add successful.");
 			

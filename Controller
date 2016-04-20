@@ -3,9 +3,7 @@ package tryCodes;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Controller {
@@ -17,6 +15,9 @@ public class Controller {
 		
 		input.addMovieActionListener(new AddMovieListener());
 		input.addLoadFilesActionListener(new LoadFilesListener());
+		input.addImportActionListener(new ImportFilesListener());
+		input.addSaveActionListener(new SaveFileListener());
+		input.addExportActionListener(new ExportFileListener());
 	}
 	
 	
@@ -30,6 +31,38 @@ public class Controller {
 			input.filesChooser.getSelectedFile();
 			//TODO model load I/O Object files 
 
+		}
+	}
+	
+	private class SaveFileListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e){
+			input.filesChooser.showSaveDialog(null);
+			//TODO save binary files
+		}
+	}
+	
+	private class ExportFileListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e){
+			input.filesChooser.showSaveDialog(null);
+			//TODO export txt files
+			
+		}
+	}
+	
+	
+	private class ImportFilesListener implements ActionListener{
+		@Override 
+		public void actionPerformed(ActionEvent e){
+			String[] choose = {"Movie", "Series", "Episode", "Actor", "Director", "Producer"};
+			String fileType = (String)JOptionPane.showInputDialog(null, "Choose file type...", 
+					"Choose what type files you want to import", JOptionPane.QUESTION_MESSAGE, null
+					,choose, choose[0]);
+			if(fileType != null){ 
+				input.filesChooser.showOpenDialog(input);
+				//TODO  import files
+			}
 		}
 	}
 	
@@ -90,6 +123,8 @@ public class Controller {
 			
 		}
 	}
+	
+	
 	
 	private class AddEpisodeListener implements ActionListener{
 		@Override

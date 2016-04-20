@@ -13,11 +13,18 @@ public class Controller {
 	public void setView(InputWindowsView view){
 		input = view;
 		
-		input.addMovieActionListener(new AddMovieListener());
 		input.addLoadFilesActionListener(new LoadFilesListener());
 		input.addImportActionListener(new ImportFilesListener());
 		input.addSaveActionListener(new SaveFileListener());
 		input.addExportActionListener(new ExportFileListener());
+		input.addAddMovieActionListener(new AddMovieListener());
+		input.addAddSeriesActionListener(new AddSeriesListener());
+		input.addAddEpisodeActionListener(new AddEpisodeListener());
+		input.addAddActorActionListener(new AddActorListener());
+		input.addAddDirectorActionListener(new AddDirectorListener());
+		input.addAddProducerActionListener(new AddProducerListener());
+		
+		
 	}
 	
 	
@@ -157,5 +164,65 @@ public class Controller {
 			//TODO add into model	
 			
 		}
+	}
+	
+	private class AddActorListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			
+			String name = input.actorNameField.getText();
+			String title = input.actorTitleField.getText();
+			String year = input.actorYearField.getText();
+			String episodeTitle = input.actorEpisodeTitleField.getText();
+			String episodeNum = input.actorEpisodeNumberField.getText();
+			String type = input.actorTitleField.getText();
+			String role = input.actorRoleField.getText();
+			String achiveFootage = input.actorArchiveFootageField.getText();
+			String credit = input.actorCreditField.getText();
+			String charName = input.actorCharNameField.getText();
+			String billingOrder = input.actorBillingOrderField.getText();
+			
+			//TODO pass paramaters into model add Actor
+		}
+		
+	}
+	
+	private class AddDirectorListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			
+			String name = input.directorNameField.getText();
+			String title = input.directorTitleField.getText();
+			String year = input.directorYearField.getText();
+			String episodeTitle = input.directorEpisodeTitleField.getText();
+			String episodeNum = input.directorEpisodeNumberField.getText();
+			String type = input.directorTitleField.getText();
+			String credit = input.directorCreditField.getText();
+			
+			//TODO pass paramaters into model add Actor
+		}
+		
+	}
+	
+
+	private class AddProducerListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			
+			String name = input.producerNameField.getText();
+			String title = input.producerTitleField.getText();
+			String year = input.producerYearField.getText();
+			String episodeTitle = input.producerEpisodeTitleField.getText();
+			String episodeNum = input.producerEpisodeNumberField.getText();
+			String type = input.producerTitleField.getText();
+			String role = input.producerRoleField.getText();
+			String credit = input.producerCreditField.getText();
+			
+			//TODO pass paramaters into model add Actor
+		}
+		
 	}
 }

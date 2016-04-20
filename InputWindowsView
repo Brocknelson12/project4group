@@ -6,6 +6,7 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -79,14 +80,12 @@ public class InputWindowsView extends JFrame{
 	public JTextField movieYearField;
 	public JTextField ronNumField;
 	public JTextField venueField;
-	JButton noMovieButton = new JButton("CANCEL");
 	public JButton addMovieButton = new JButton("ADD");
 	
 	//Enter Series view compoenets
 	public JTextField seriesTitleField;
 	public JTextField seriesStartYearField;
 	public JTextField seriesEndYearField;
-	JButton noSeriesButton = new JButton("CANCEL");	
 	public JButton addSeriesButton = new JButton("ADD");
 	
 	
@@ -96,18 +95,61 @@ public class InputWindowsView extends JFrame{
 	public JTextField episodeEndYearField;
 	public JTextField episodeTitleField;
 	public JTextField episodeNumField;
-	JButton noButton = new JButton("CANCEL");
 	public JButton addEpisodeButton = new JButton("ADD");
+	
+	//Enter Actor view components
+	public JTextField actorNameField;
+	public JTextField actorTitleField;
+	public JTextField actorYearField;
+	public JTextField actorEpisodeTitleField;
+	public JTextField actorEpisodeNumberField;
+	public JTextField actorTypeField;
+	public JTextField actorRoleField;
+	public JTextField actorArchiveFootageField;
+	public JTextField actorCreditField;
+	public JTextField actorCharNameField;
+	public JTextField actorBillingOrderField;
+	JButton addActorButton = new JButton("Add");
+	
+	//Enter director view components
+	public JTextField directorNameField;
+	public JTextField directorTitleField;
+	public JTextField directorYearField;
+	public JTextField directorEpisodeTitleField;
+	public JTextField directorEpisodeNumberField;
+	public JTextField directorTypeField;
+	public JTextField directorCreditField;
+	JButton addDirectorButton = new JButton("Add");
+	
+	//Enter Producer view Components
+	public JTextField producerNameField;
+	public JTextField producerTitleField;
+	public JTextField producerYearField;
+	public JTextField producerEpisodeTitleField;
+	public JTextField producerEpisodeNumberField;
+	public JTextField producerTypeField;
+	public JTextField producerCreditField;
+	public JTextField producerRoleField;
+	JButton addProducerButton = new JButton("Add");
+	
+	
 	
 	//frames
 	JFrame movieFrame = new JFrame();
 	JFrame seriesFrame = new JFrame();
 	JFrame episodeFrame = new JFrame();
+	JFrame actorFrame = new JFrame();
+	JFrame directorFrame = new JFrame();
+	JFrame producerFrame = new JFrame();
+	
 	public InputWindowsView(){
 
 		addMovieFrame(movieFrame);
 		addSeriesFrame(seriesFrame);
 		addEpisodeFrame(episodeFrame);
+		addActorFrame(actorFrame);
+		addDirectorFrame(directorFrame);
+		addProducerFrame(producerFrame);
 		
 		setTitle("MDb");
 		setLayout(new BorderLayout());
@@ -241,6 +283,9 @@ public class InputWindowsView extends JFrame{
 			if(e.getActionCommand().equals("movie")) frameList.get(0).dispose();
 			if(e.getActionCommand().equals("series")) frameList.get(1).dispose();
 			if(e.getActionCommand().equals("episode")) frameList.get(2).dispose();
+			if(e.getActionCommand().equals("actor")) frameList.get(3).dispose();
+			if(e.getActionCommand().equals("director")) frameList.get(4).dispose();
+			if(e.getActionCommand().equals("producer")) frameList.get(5).dispose();
 		}
 	}
 	
@@ -250,7 +295,12 @@ public class InputWindowsView extends JFrame{
 			int i = 0;
 			for(JRadioButton b : buttonList){
 				if(b.isSelected()){
-					frameList.get(i - 1).setVisible(true);
+					if(i >= 5){
+						frameList.get(i - 2).setVisible(true);
+					}
+					else{
+						frameList.get(i - 1).setVisible(true);
+					}
 				}
 				i++;
 			}
@@ -295,17 +345,30 @@ public class InputWindowsView extends JFrame{
 		producersButton.addActionListener(e);
 	}
 	
-	public void addMovieActionListener(ActionListener e){
+	public void addAddMovieActionListener(ActionListener e){
 		addMovieButton.addActionListener(e);
 	}
 	
-	public void addSeriesActionListener(ActionListener e){
+	public void addAddSeriesActionListener(ActionListener e){
 		addSeriesButton.addActionListener(e);
 	}
 	
-	public void addEpisodeActionListener(ActionListener e){
+	public void addAddEpisodeActionListener(ActionListener e){
 		addEpisodeButton.addActionListener(e);
 	}
+	
+	public void addAddActorActionListener(ActionListener e){
+		addActorButton.addActionListener(e);
+	}
+	
+	public void addAddDirectorActionListener(ActionListener e){
+		addDirectorButton.addActionListener(e);
+	}
+	
+	public void addAddProducerActionListener(ActionListener e){
+		addProducerButton.addActionListener(e);
+	}
+	
 	
 	public void addLoadFilesActionListener(ActionListener e){
 		load.addActionListener(e);
@@ -349,7 +412,7 @@ public class InputWindowsView extends JFrame{
 	}
 	
 	
-	public void addMovieFrame(JFrame frame){
+	private void addMovieFrame(JFrame frame){
 		frame = new JFrame("Add movie");
 		JButton noButton = new JButton("CANCEL");
 		noButton.setActionCommand("movie");
@@ -385,7 +448,7 @@ public class InputWindowsView extends JFrame{
 		frameList.add(frame);
 	}
 	
-	public void addSeriesFrame (JFrame frame){
+	private void addSeriesFrame (JFrame frame){
 		JButton noButton = new JButton("CANCEL");
 		noButton.setActionCommand("series");
 		noButton.addActionListener(new CancelListener());
@@ -417,7 +480,7 @@ public class InputWindowsView extends JFrame{
 		frameList.add(frame);
 	}
 	
-	public void addEpisodeFrame(JFrame frame){
+	private void addEpisodeFrame(JFrame frame){
 		JButton noButton = new JButton("CANCEL");
 		noButton.addActionListener(new CancelListener());
 		noButton.setActionCommand("episode");
@@ -454,6 +517,190 @@ public class InputWindowsView extends JFrame{
 		jplEnter.add(noButton);
 		frame.add(jplEnter);
 		frame.setResizable(true);
+		frame.pack();
+		frameList.add(frame);
+	}
+	
+	private void addActorFrame(JFrame frame){
+		frame = new JFrame("Add Actor");
+		
+		JPanel jplEnter = new JPanel(new GridLayout(12, 0, 5, 5));
+		
+		JButton noButton = new JButton("CANCEL");
+		noButton.setActionCommand("actor");
+		noButton.addActionListener(new CancelListener());
+		
+		actorNameField = new JTextField(20);
+		JLabel nameLabel = new JLabel("Actor Name: ", JLabel.RIGHT);
+		jplEnter.add(nameLabel);
+		jplEnter.add(actorNameField);
+		
+		actorTitleField = new JTextField(20);
+		JLabel titleLabel = new JLabel("Title: ", JLabel.RIGHT);
+		jplEnter.add(titleLabel);
+		jplEnter.add(actorTitleField);
+		
+		actorYearField = new JTextField(20);
+		JLabel yearLabel = new JLabel("Year: ", JLabel.RIGHT);
+		jplEnter.add(yearLabel);
+		jplEnter.add(actorYearField);
+		
+		actorEpisodeTitleField = new JTextField(20);
+		JLabel episodeTitleLabel = new JLabel("Episode Title: ", JLabel.RIGHT);
+		jplEnter.add(episodeTitleLabel);
+		jplEnter.add(actorEpisodeTitleField);
+		
+		actorEpisodeNumberField = new JTextField(20);
+		JLabel episodeNumLabel = new JLabel("Episode Number: ", JLabel.RIGHT);
+		jplEnter.add(episodeNumLabel);
+		jplEnter.add(actorEpisodeNumberField);
+		
+		actorTypeField = new JTextField(20);
+		JLabel type = new JLabel("Venue: ", JLabel.RIGHT);
+		jplEnter.add(type);
+		jplEnter.add(actorTypeField);
+		
+		actorRoleField = new JTextField(20);
+		JLabel role = new JLabel("Role: ", JLabel.RIGHT);
+		jplEnter.add(role);
+		jplEnter.add(actorRoleField);
+		
+		actorArchiveFootageField = new JTextField(20);
+		JLabel footage = new JLabel("Achive Footage: ", JLabel.RIGHT);
+		jplEnter.add(footage);
+		jplEnter.add(actorArchiveFootageField);
+		
+		actorCreditField = new JTextField(20);
+		JLabel creditLabel = new JLabel("Credit: ", JLabel.RIGHT);
+		jplEnter.add(creditLabel);
+		jplEnter.add(actorCreditField);
+		
+		actorCharNameField = new JTextField(20);
+		JLabel charNameLabel = new JLabel("Char Name: ", JLabel.RIGHT);
+		jplEnter.add(charNameLabel);
+		jplEnter.add(actorCharNameField);
+		
+		actorBillingOrderField = new JTextField(20);
+		JLabel billingOrderLabel = new JLabel("Billing Order: ", JLabel.RIGHT);
+		jplEnter.add(billingOrderLabel);
+		jplEnter.add(actorBillingOrderField);
+		
+		jplEnter.add(addActorButton);
+		jplEnter.add(noButton);
+		
+		frame.add(jplEnter);
+		frame.setResizable(false);
+		frame.pack();
+		frameList.add(frame);
+	}
+	
+	private void addDirectorFrame(JFrame frame){
+		frame = new JFrame("Add Director");
+		
+		JPanel jplEnter = new JPanel(new GridLayout(8, 0, 5, 5));
+		
+		JButton noButton = new JButton("CANCEL");
+		noButton.setActionCommand("director");
+		noButton.addActionListener(new CancelListener());
+		
+		directorNameField = new JTextField(20);
+		JLabel nameLabel = new JLabel("Director Name: ", JLabel.RIGHT);
+		jplEnter.add(nameLabel);
+		jplEnter.add(directorNameField);
+		
+		directorTitleField = new JTextField(20);
+		JLabel titleLabel = new JLabel("Title: ", JLabel.RIGHT);
+		jplEnter.add(titleLabel);
+		jplEnter.add(directorTitleField);
+		
+		directorYearField = new JTextField(20);
+		JLabel yearLabel = new JLabel("Year: ", JLabel.RIGHT);
+		jplEnter.add(yearLabel);
+		jplEnter.add(directorYearField);
+		
+		directorEpisodeTitleField = new JTextField(20);
+		JLabel episodeTitleLabel = new JLabel("Episode Title: ", JLabel.RIGHT);
+		jplEnter.add(episodeTitleLabel);
+		jplEnter.add(directorEpisodeTitleField);
+		
+		directorEpisodeNumberField = new JTextField(20);
+		JLabel episodeNumLabel = new JLabel("Episode Number: ", JLabel.RIGHT);
+		jplEnter.add(episodeNumLabel);
+		jplEnter.add(directorEpisodeNumberField);
+		
+		directorTypeField = new JTextField(20);
+		JLabel type = new JLabel("Venue: ", JLabel.RIGHT);
+		jplEnter.add(type);
+		jplEnter.add(directorTypeField);
+		
+		directorCreditField = new JTextField(20);
+		JLabel creditLabel = new JLabel("Credit: ", JLabel.RIGHT);
+		jplEnter.add(creditLabel);
+		jplEnter.add(directorCreditField);
+		
+		jplEnter.add(addDirectorButton);
+		jplEnter.add(noButton);
+		
+		frame.add(jplEnter);
+		frame.setResizable(false);
+		frame.pack();
+		frameList.add(frame);
+	}
+	
+	private void addProducerFrame(JFrame frame){
+		frame = new JFrame("Add Producer");
+		
+		JPanel jplEnter = new JPanel(new GridLayout(9, 0, 5, 5));
+		
+		JButton noButton = new JButton("CANCEL");
+		noButton.setActionCommand("producer");
+		noButton.addActionListener(new CancelListener());
+		
+		producerNameField = new JTextField(20);
+		JLabel nameLabel = new JLabel("Producer Name: ", JLabel.RIGHT);
+		jplEnter.add(nameLabel);
+		jplEnter.add(producerNameField);
+		
+		producerTitleField = new JTextField(20);
+		JLabel titleLabel = new JLabel("Title: ", JLabel.RIGHT);
+		jplEnter.add(titleLabel);
+		jplEnter.add(producerTitleField);
+		
+		producerYearField = new JTextField(20);
+		JLabel yearLabel = new JLabel("Year: ", JLabel.RIGHT);
+		jplEnter.add(yearLabel);
+		jplEnter.add(producerYearField);
+		
+		producerEpisodeTitleField = new JTextField(20);
+		JLabel episodeTitleLabel = new JLabel("Episode Title: ", JLabel.RIGHT);
+		jplEnter.add(episodeTitleLabel);
+		jplEnter.add(producerEpisodeTitleField);
+		
+		producerEpisodeNumberField = new JTextField(20);
+		JLabel episodeNumLabel = new JLabel("Episode Number: ", JLabel.RIGHT);
+		jplEnter.add(episodeNumLabel);
+		jplEnter.add(producerEpisodeNumberField);
+		
+		producerTypeField = new JTextField(20);
+		JLabel type = new JLabel("Venue: ", JLabel.RIGHT);
+		jplEnter.add(type);
+		jplEnter.add(producerTypeField);
+		
+		producerRoleField = new JTextField(20);
+		JLabel roleLabel = new JLabel("Role: ", JLabel.RIGHT);
+		jplEnter.add(roleLabel);
+		jplEnter.add(producerRoleField);
+		
+		producerCreditField = new JTextField(20);
+		JLabel creditLabel = new JLabel("Credit: ", JLabel.RIGHT);
+		jplEnter.add(creditLabel);
+		jplEnter.add(producerCreditField);
+		
+		jplEnter.add(addProducerButton);
+		jplEnter.add(noButton);
+		
+		frame.add(jplEnter);
+		frame.setResizable(false);
 		frame.pack();
 		frameList.add(frame);
 	}

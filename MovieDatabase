@@ -281,4 +281,88 @@ public class MovieDatabase{
 	{
 		return producers;
 	}
+	public int searchMovie(Show searchedMovie) {
+
+		for (int i = 0; i < movies.size() - 1; ++i) {
+			while (searchedMovie.equals(movies.get(i))) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	public boolean addMovie(Show movie) {
+		int i = searchMovie(movie);
+		if (i == -1) {
+			movies.add(movie);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	public ArrayList<Show> getMovies()
+	{
+		return movies;
+	}
+	public boolean editMovie(int indexOfMovie, Creator newMovie)
+	{
+		movies.remove(indexOfMovie);
+		movies.add(indexOfMovie, newMovie);
+		return true;
+	}
+	public int searchTVSeries(Show searchedTVSeries) {
+
+		for (int i = 0; i < tVseries.size() - 1; ++i) {
+			while (searchedTVSeries.equals(tVseries.get(i))) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	public boolean addTVSeries(Show TVSeries) {
+		int i = searchTVSeries(TVSeries);
+		if (i == -1) {
+			tVseries.add(TVSeries);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	public ArrayList<Show> getTVSeries()
+	{
+		return tVseries;
+	}
+	public boolean editTVSeries(int indexOfTVSeries, Show newTVSeries)
+	{
+		tVseries.remove(indexOfTVSeries);
+		tVseries.add(indexOfTVSeries, newTVSeries);
+		return true;
+	}
+	public int searchEpisode(Show searchedEpisode) {
+
+		for (int i = 0; i < episodes.size() - 1; ++i) {
+			while (searchedEpisode.equals(episodes.get(i))) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	public boolean addEpisode(Show episode) {
+		int i = searchEpisode(episode);
+		if (i == -1) {
+			episodes.add(episode);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	public ArrayList<Show> getEpisodes()
+	{
+		return episodes;
+	}
+	public boolean editEpisode(int indexOfEpisode, Creator newEpisode)
+	{
+		episodes.remove(indexOfEpisode);
+		episodes.add(indexOfEpisode, newEpisode);
+		return true;
+	}
 	}

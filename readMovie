@@ -1,0 +1,37 @@
+	while((line = br.readLine()) != null){
+			if(line.contains("(TV)") || line.contains("(V)") || line.contains("(T)")){
+				String[] info = line.split("\\s+");
+				String title = info[0];
+				for(int i = 1; i < info.length - 3; i++){
+					title = title + " " + info[i];
+					
+				}
+				String ronNum =info[info.length - 3];
+				if(ronNum.length() > 6){
+					ronNum = ronNum.substring(5, ronNum.indexOf(")"));
+				}
+				else{
+					ronNum = "";
+				}
+				
+				movies.add(new Movie(title,ronNum, info[info.length - 2], info[info.length - 1]));
+			}
+			else{
+				String title = "";
+				String[] info = line.split("\\s+");
+				title = info[0];
+				for(int i = 1; i < info.length - 2; i++){
+					title = title + " " + info[i];
+					
+				}
+				String ronNum =info[info.length - 2];
+				if(ronNum.length() > 6){
+					ronNum = ronNum.substring(5, ronNum.indexOf(")"));
+				}
+				else{
+					ronNum = "";
+				}
+				movies.add(new Movie(title, ronNum, info[info.length - 1]));
+				
+			}
+		}

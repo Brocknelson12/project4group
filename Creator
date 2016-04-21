@@ -983,4 +983,112 @@
 		}
 		return -1;
 	}
+	public int searchActor(Creator actor)
+	{
+		for(int i = 0; i < actors.size(); i ++)
+		{
+			if(actor.equals(actors.get(i)))
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public boolean addActor(Creator actor)
+	{
+		int i = searchActor(actor);
+		if(i == -1)
+		{
+			actors.add(actor);
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	public ArrayList<Creator> getActor()
+	{
+		return actors;
+	}
+	
+	public boolean editActor(int indexOfActor, Creator newActor)
+	{
+		actors.remove(indexOfActor);
+		actors.add(indexOfActor, newActor);
+		return true;
+	}
+	
+	public int searchDirector(Creator director)
+	{
+		for(int i = 0; i < directors.size(); i ++)
+		{
+			if(director.equals(directors.get(i)))
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public boolean addDirector(Creator director)
+	{
+		int i = searchDirector(director);
+		if(i == -1)
+		{
+			directors.add(director);
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	public ArrayList<Creator> getDirector()
+	{
+		return directors;
+	}
+	
+	public boolean editDirector(int indexOfDirector, Creator newDirector)
+	{
+		directors.remove(indexOfDirector);
+		directors.add(indexOfDirector, newDirector);
+		return true;
+	}
+	
+	public int searchProducer(Creator producer)
+	{
+		for(int i = 0; i < producers.size(); i ++)
+		{
+			if(producer.equals(producers.get(i)))
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public boolean addProducer(Creator producer)
+	{
+		int i = searchProducer(producer);
+		if(i == -1)
+		{
+			producers.add(producer);
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	public ArrayList<Creator> getProducer()
+	{
+		return producers;
+	}
+	
+	public boolean editProducer(int indexOfProducer, Creator newProducer)
+	{
+		producers.remove(indexOfProducer);
+		producers.add(indexOfProducer, newProducer);
+		return true;
+	}
+
 }

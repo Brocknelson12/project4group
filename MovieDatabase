@@ -1,10 +1,22 @@
-
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 	
+public class MovieDatabase{
 	/** SerialID that lets us implement Serializable */
 	private static final long serialVersionUID = 1L;
 	
 	/**List containing all the movies and TV shows*/
 	private ArrayList<Show> mDb = new ArrayList<Show>();
+	
+	private ArrayList<Show> tVseries = new ArrayList<Show>();
+	
+	private ArrayList<Show> movies = new ArrayList<Show>();
+	
+	private ArrayList<Show> episodes = new ArrayList<Show>();
 	/**LinkedHashMap containing all the actors*/
 	private LinkedHashMap<String, ArrayList<Creator>> actors = new LinkedHashMap<String, ArrayList<Creator>>();
 	/**LinkedHashMap containing all the directors*/
@@ -178,7 +190,8 @@
 			extraInfo.add(line.substring((line.indexOf("(", index + 1) + 1), (line.indexOf(")", line.indexOf("(", index + 1) + 1))));
 			index = line.indexOf(")", line.indexOf("(", index + 1) + 1) + 1;
 		}
-		
+		Movie movie = new Movie(name, year, extraInfo);
+		movies.add(movie);
 		//return the movie based on the string
 		return new Movie(name, year, extraInfo);
 	}
@@ -198,6 +211,8 @@
 		year = line.substring(line.length() - 9, line.length() - 5);
 		endYear = line.substring(line.length() - 4, line.length());
 		
+		TVSeries series = new TVSeries(name, year, endYear);
+		tVseries.add(series);
 		return new TVSeries(name, year, endYear);
 	}
 	
@@ -224,6 +239,8 @@
 		
 		year = line.substring(line.indexOf("(") + 1, line.indexOf(")"));
 		
+		Episode episode = new Episode(name, year, episodeNumber, series);
+		episodes.add(episode);
 		return new Episode(name, year, episodeNumber, series);
 	}
 	
@@ -256,7 +273,6 @@
 	{
 		return directors;
 	}
-	}
 	
 	/**
 	 * @return this object's LinkedHashMap<String, ArrayList<Creator>> , containing an ArrayList of the producers.
@@ -264,4 +280,5 @@
 	public LinkedHashMap<String, ArrayList<Creator>> getProducerMap()
 	{
 		return producers;
+	}
 	}

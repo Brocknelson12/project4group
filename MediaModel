@@ -1,3 +1,4 @@
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -11,15 +12,289 @@ public class MediaModel {
 	public static ArrayList<Creator> directors = new ArrayList<Creator>();
 	/** List that stores information about producers */
 	public static ArrayList<Creator> producers = new ArrayList<Creator>();
-	private Show showOne;
-	private Creator creatorOne;
+	/** List that stores information about movies */
+	public static ArrayList<Show> movies = new ArrayList<Show>();
+	/** List that stores information about series */
+	public static ArrayList<Show> series = new ArrayList<Show>();
+	/** List that stores information about episodes */
+	public static ArrayList<Show> episodes = new ArrayList<Show>();
+	
 	private ArrayList<ActionListener> actionListenerList;
 
-
+	/**Takes file of movies, parses them, and add them a movie array list
+	 * 
+	 * @param file Name of File containing movies
+	 * @throws IOException 
+	 */
+	public void readInMoviesFile(File movie) throws IOException
+	{
+		movies = MovieDatabase.readShowsIntoDB(movie, true);
+	}
+	
+	/**Takes a selected movie, and searches through the movies array list for that movie
+	 * 
+	 * @param the selected movie that is being searched in the array list of type Show
+	 * @return the index of the selected movie in the array list,
+	 * or if selected movie not found, returns -1
+	 */
+	public int searchMovie(Show movie)
+	{
+		for(int i = 0; i < movies.size(); i ++)
+		{
+			if(movie.equals(movies.get(i)))
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	/**Takes a selected movie, and searches through the movies array list for that movie
+	 * if movie not found, adds movie to array list.
+	 * 
+	 * @param the selected movie that is being added to the array list of type Show
+	 * @return true if selected movie was added, false if the selected movie was a duplicate and was not added
+	 */
+	public boolean addMovie(Show movie)
+	{
+		int i = searchMovie(movie);
+		if(i == -1)
+		{
+			movies.add(movie);
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	/**
+	 * @return the movies array list
+	 */
+	public ArrayList<Show> getMovies()
+	{
+		return movies;
+	}
+	
+	/**Takes a newly edited movie, and index of the movie being edited in the movies array list, 
+	 * removes movie at the current index in the array list and replaces it with the newly edited movie.
+	 * 
+	 * @param the newly edited movie that is being added to the array list of type Show
+	 * @param the selected movie being edited in the array list
+	 * @return true when movie at current index is replaced with the newly edited movie.
+	 */
+	public boolean editMovie(int indexOfMovie, Show newMovie)
+	{
+		movies.remove(indexOfMovie);
+		movies.add(indexOfMovie, newMovie);
+		return true;
+	}
+	
+	/**Takes index of the movie being deleted in the movies array list, removes movie at the index in the array list.
+	 * 
+	 * @param the selected movie being deleted in the array list
+	 * @return true when movie at current index is deleted
+	 */
+	public boolean deleteMovie(int indexOfMovie)
+	{
+		movies.remove(indexOfMovie);
+		return true;
+	}
+	
+	/**Deletes entire movies array list
+	 * 
+	 * @return true when movies array list is deleted.
+	 */
+	public boolean clearMovies()
+	{
+		movies.clear();
+		return true;
+	}
+	
+	/**Takes file of series/episodes, parses them, separates them, 
+	 * and adds them to either a series and episodes array list
+	 * 
+	 * @param file Name of File containing series
+	 * @throws IOException 
+	 */
+	public void readInSeriesFile(File seriesFile) throws IOException
+	{
+		series = MovieDatabase.readShowsIntoDB(seriesFile, false);
+		series = MovieDatabase.getTVSeries();
+		episodes = MovieDatabase.getEpisodes();
+	}
+	
+	/**Takes a selected series, and searches through the series array list for that series
+	 * 
+	 * @param the selected series that is being searched in the array list of type Show
+	 * @return the index of the selected series in the array list,
+	 * or if selected series not found, returns -1
+	 */
+	public int searchSeries(Show seriesKey)
+	{
+		for(int i = 0; i < series.size(); i ++)
+		{
+			if(seriesKey.equals(series.get(i)))
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	/**Takes a selected series, and searches through the series array list for that series
+	 * if series not found, adds series to array list.
+	 * 
+	 * @param the selected series that is being added to the array list of type Show
+	 * @return true if selected series was added, false if the selected series was a duplicate and was not added
+	 */
+	public boolean addSeries(Show seriesKey)
+	{
+		int i = searchSeries(seriesKey);
+		if(i == -1)
+		{
+			series.add(seriesKey);
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	/**
+	 * @return the series array list
+	 */
+	public ArrayList<Show> getSeries()
+	{
+		return series;
+	}
+	
+	/**Takes a newly edited series, and index of the series being edited in the series array list, 
+	 * removes series at the current index in the array list and replaces it with the newly edited series.
+	 * 
+	 * @param the newly edited series that is being added to the array list of type Show
+	 * @param the selected series being edited in the array list
+	 * @return true when series at current index is replaced with the newly edited series.
+	 */
+	public boolean editSeries(int indexOfSeries, Show newSeries)
+	{
+		series.remove(indexOfSeries);
+		series.add(indexOfSeries, newSeries);
+		return true;
+	}
+	
+	/**Takes index of the series being deleted in the series array list, removes series at the index in the array list.
+	 * 
+	 * @param the selected series being deleted in the array list
+	 * @return true when series at current index is deleted
+	 */
+	public boolean deleteSeries(int indexOfSeries)
+	{
+		series.remove(indexOfSeries);
+		return true;
+	}
+	
+	/**Deletes entire series array list
+	 * 
+	 * @return true when series array list is deleted.
+	 */
+	public boolean clearSeries()
+	{
+		series.clear();
+		return true;
+	}
+	
+	/**Takes a selected episode, and searches through the episodes array list for that episode
+	 * 
+	 * @param the selected episode that is being searched in the array list of type Show
+	 * @return the index of the selected episode in the array list,
+	 * or if selected episode not found, returns -1
+	 */
+	public int searchEpisode(Show episode)
+	{
+		for(int i = 0; i < episodes.size(); i ++)
+		{
+			if(episode.equals(episodes.get(i)))
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	/**Takes a selected episode, and searches through the episodes array list for that episode
+	 * if episode not found, adds epidoe to array list.
+	 * 
+	 * @param the selected episode that is being added to the array list of type Show
+	 * @return true if selected episode was added, false if the selected episode was a duplicate and was not added
+	 */
+	public boolean addEpisode(Show episode)
+	{
+		int i = searchEpisode(episode);
+		if(i == -1)
+		{
+			episodes.add(episode);
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	/**
+	 * @return the episode array list
+	 */
+	public ArrayList<Show> getEpisode()
+	{
+		return episodes;
+	}
+	
+	/**Takes a newly edited episode, and index of the episode being edited in the episodes array list, 
+	 * removes episode at the current index in the array list and replaces it with the newly edited episode.
+	 * 
+	 * @param the newly edited episode that is being added to the array list of type Show
+	 * @param the selected episode being edited in the array list
+	 * @return true when episode at current index is replaced with the newly edited episode.
+	 */
+	public boolean editEpisode(int indexOfEpisode, Show newEpisode)
+	{
+		episodes.remove(indexOfEpisode);
+		episodes.add(indexOfEpisode, newEpisode);
+		return true;
+	}
+	
+	/**Takes index of the episode being deleted in the episodes array list, removes episode at the index in the array list.
+	 * 
+	 * @param the selected episode being deleted in the array list
+	 * @return true when episode at current index is deleted
+	 */
+	public boolean deleteEpisode(int indexOfEpisode)
+	{
+		episodes.remove(indexOfEpisode);
+		return true;
+	}
+	
+	/**Deletes entire episodes array list
+	 * 
+	 * @return true when episodes array list is deleted.
+	 */
+	public boolean clearEpisodes()
+	{
+		episodes.clear();
+		return true;
+	}
+	/**Takes file of actors, parses them, and add them a actors array list
+	 * 
+	 * @param file Name of File containing actor
+	 * @throws IOException 
+	 */
 	public void readInActorFile(File actor) throws IOException{
 		actors = Creator.fillActors(actor);
 	}
 	
+	/**Takes a selected actor, and searches through the actor array list for that actor
+	 * 
+	 * @param the selected actor that is being searched in the array list of type Creator
+	 * @return the index of the selected actor in the array list,
+	 * or if selected actor not found, returns -1
+	 */
 	public int searchActor(Creator actor)
 	{
 		for(int i = 0; i < actors.size(); i ++)
@@ -32,6 +307,12 @@ public class MediaModel {
 		return -1;
 	}
 	
+	/**Takes a selected actor, and searches through the actor array list for that actor
+	 * if actor not found, adds actor to array list.
+	 * 
+	 * @param the selected actor that is being added to the array list of type Creator
+	 * @return true if selected actor was added, false if the selected actor was a duplicate and was not added
+	 */
 	public boolean addActor(Creator actor)
 	{
 		int i = searchActor(actor);
@@ -44,11 +325,21 @@ public class MediaModel {
 			return false;
 	}
 	
+	/**
+	 * @return the actor array list
+	 */
 	public ArrayList<Creator> getActor()
 	{
 		return actors;
 	}
 	
+	/**Takes a newly edited actor, and index of the actor being edited in the actor array list, 
+	 * removes actor at the current index in the array list and replaces it with the newly edited actor.
+	 * 
+	 * @param the newly edited actor that is being added to the array list of type Creator
+	 * @param the selected actor being edited in the array list
+	 * @return true when actor at current index is replaced with the newly edited actor.
+	 */
 	public boolean editActor(int indexOfActor, Creator newActor)
 	{
 		actors.remove(indexOfActor);
@@ -56,22 +347,42 @@ public class MediaModel {
 		return true;
 	}
 	
+	/**Takes index of the actor being deleted in the actor array list, removes actor at the index in the array list.
+	 * 
+	 * @param the selected actor being deleted in the array list
+	 * @return true when actor at current index is deleted
+	 */
 	public boolean deleteActor(int indexOfActor)
 	{
 		actors.remove(indexOfActor);
 		return true;
 	}
 	
+	/**Deletes entire actors array list
+	 * 
+	 * @return true when actors array list is deleted.
+	 */
 	public boolean clearActors()
 	{
 		actors.clear();
 		return true;
 	}
 	
+	/**Takes file of director, parses them, and add them a directors array list
+	 * 
+	 * @param file Name of File containing directors
+	 * @throws IOException 
+	 */
 	public void readInDirectorFile(File director) throws IOException{
 		directors = Creator.fillDirectors(director);
 	}
 	
+	/**Takes a selected director, and searches through the director array list for that director
+	 * 
+	 * @param the selected director that is being searched in the array list of type Creator
+	 * @return the index of the selected director in the array list,
+	 * or if selected director not found, returns -1
+	 */
 	public int searchDirector(Creator director)
 	{
 		for(int i = 0; i < directors.size(); i ++)
@@ -84,6 +395,12 @@ public class MediaModel {
 		return -1;
 	}
 	
+	/**Takes a selected director, and searches through the director array list for that director
+	 * if director not found, adds director to array list.
+	 * 
+	 * @param the selected director that is being added to the array list of type Creator
+	 * @return true if selected director was added, false if the selected director was a duplicate and was not added
+	 */
 	public boolean addDirector(Creator director)
 	{
 		int i = searchDirector(director);
@@ -96,11 +413,21 @@ public class MediaModel {
 			return false;
 	}
 	
+	/**
+	 * @return the director array list
+	 */
 	public ArrayList<Creator> getDirector()
 	{
 		return directors;
 	}
 	
+	/**Takes a newly edited director, and index of the director being edited in the directors array list, 
+	 * removes director at the current index in the array list and replaces it with the newly edited director.
+	 * 
+	 * @param the newly edited director that is being added to the array list of type Creator
+	 * @param the selected director being edited in the array list
+	 * @return true when director at current index is replaced with the newly edited director.
+	 */
 	public boolean editDirector(int indexOfDirector, Creator newDirector)
 	{
 		directors.remove(indexOfDirector);
@@ -108,22 +435,42 @@ public class MediaModel {
 		return true;
 	}
 	
+	/**Takes index of the director being deleted in the directors array list, removes director at the index in the array list.
+	 * 
+	 * @param the selected director being deleted in the array list
+	 * @return true when director at current index is deleted
+	 */
 	public boolean deleteDirector(int indexOfDirector)
 	{
 		directors.remove(indexOfDirector);
 		return true;
 	}
 	
+	/**Deletes entire directors array list
+	 * 
+	 * @return true when directors array list is deleted.
+	 */
 	public boolean clearDirectors()
 	{
 		directors.clear();
 		return true;
 	}
 	
+	/**Takes file of producers, parses them, and add them a producers array list
+	 * 
+	 * @param file Name of File containing producers
+	 * @throws IOException 
+	 */
 	public void readInProducerFile(File producer) throws IOException{
 		producers = Creator.fillProducers(producer);
 	}
 	
+	/**Takes a selected producer, and searches through the actor array list for that producer
+	 * 
+	 * @param the selected producer that is being searched in the array list of type Creator
+	 * @return the index of the selected producer in the array list,
+	 * or if selected producer not found, returns -1
+	 */
 	public int searchProducer(Creator producer)
 	{
 		for(int i = 0; i < producers.size(); i ++)
@@ -136,6 +483,12 @@ public class MediaModel {
 		return -1;
 	}
 	
+	/**Takes a selected producer, and searches through the producer array list for that producer
+	 * if producer not found, adds producer to array list.
+	 * 
+	 * @param the selected producer that is being added to the array list of type Creator
+	 * @return true if selected producer was added, false if the selected producer was a duplicate and was not added
+	 */
 	public boolean addProducer(Creator producer)
 	{
 		int i = searchProducer(producer);
@@ -148,11 +501,21 @@ public class MediaModel {
 			return false;
 	}
 	
+	/**
+	 * @return the producer array list
+	 */
 	public ArrayList<Creator> getProducer()
 	{
 		return producers;
 	}
 	
+	/**Takes a newly edited producer, and index of the producer being edited in the producers array list, 
+	 * removes producer at the current index in the array list and replaces it with the newly edited producer.
+	 * 
+	 * @param the newly edited producer that is being added to the array list of type Creator
+	 * @param the selected producer being edited in the array list
+	 * @return true when producer at current index is replaced with the newly edited producer.
+	 */
 	public boolean editProducer(int indexOfProducer, Creator newProducer)
 	{
 		producers.remove(indexOfProducer);
@@ -160,14 +523,37 @@ public class MediaModel {
 		return true;
 	}
 	
+	/**Takes index of the producer being deleted in the producers array list, removes producer at the index in the array list.
+	 * 
+	 * @param the selected producer being deleted in the array list
+	 * @return true when producer at current index is deleted
+	 */
 	public boolean deleteProducer(int indexOfProducer)
 	{
 		producers.remove(indexOfProducer);
 		return true;
 	}
 	
+	/**Deletes entire producers array list
+	 * 
+	 * @return true when producers array list is deleted.
+	 */
 	public boolean clearProducers()
 	{
+		producers.clear();
+		return true;
+	}
+	
+	/**Deletes all array lists
+	 * 
+	 * @return true when all array lists are deleted.
+	 */
+	public boolean clearAll(){
+		movies.clear();
+		series.clear();
+		episodes.clear();
+		actors.clear();
+		directors.clear();
 		producers.clear();
 		return true;
 	}

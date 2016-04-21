@@ -1,228 +1,1213 @@
-package tryCodes;
 
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
+import javax.swing.Action;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.DefaultEditorKit;
 
-public class Controller {
-	private InputWindowsView input;
+public class InputWindowsView extends JFrame{
+	public String selectCommand;
+	//selection
+	public JRadioButton mediaButton = new JRadioButton("Media");
+	public JRadioButton movieButton = new JRadioButton("Movie");
+	public JRadioButton seriesButton = new JRadioButton("Series");
+	public JRadioButton episodeButton = new JRadioButton("Episode");
+	public JRadioButton makersButton = new JRadioButton("Makers");
+	public JRadioButton actorsButton = new JRadioButton("Actors");
+	public JRadioButton directorsButton = new JRadioButton("Directors");
+	public JRadioButton producersButton = new JRadioButton("Producers");
+	public ArrayList<JRadioButton> buttonList = new ArrayList<JRadioButton>();
+	
+	public ButtonGroup buttons = new ButtonGroup();
+	
+	//file chooser
+	public JFileChooser filesChooser = new JFileChooser();
+	
+	//ouputArea
+	public JLabel outputLabel = new JLabel("Output Title");
+	
+	private DefaultListModel<Show> listModel = new DefaultListModel<Show>();
+	public JList<Show> objectList = new JList<Show>(listModel);
+	private JScrollPane outputScroll = new JScrollPane(objectList);
+
+	public Action selectLine;
+	public String selectString;
+	public String selectType;
+	public String outputInitiate;
+	
+	//File Menu
+	public JMenu fileMenu = new JMenu("File");
+	public JMenuItem load = new JMenuItem("Load");
+	public JMenuItem save = new JMenuItem("Save");
+	public JMenuItem importItem = new JMenuItem("Import");
+	public JMenuItem export = new JMenuItem("Export");
+	
+	//Edit Menu
+	public JMenu editMenu = new JMenu("Edit");
+	public JMenuItem add = new JMenuItem("Add");
+	public JMenuItem edit = new JMenuItem("Edit");
+	public JMenuItem delete = new JMenuItem("Delete");
+	public JMenuItem clear = new JMenuItem("Clear");
+	public JMenuItem clearAll = new JMenuItem("Clear All");
+	
+	//Display Menu
+	public JMenu displayMenu = new JMenu("Display");
+	public JMenuItem pieChart = new JMenuItem("Pie Chart");
+	public JMenuItem histogram = new JMenuItem("Histogram");
+	public JMenuBar menuBar = new JMenuBar();
+	
+	//Enter movie View Compoenents
+	public JTextField movieTitleField;
+	public JTextField movieYearField;
+	public JTextField ronNumField;
+	public JTextField venueField;
+	public JButton addMovieButton = new JButton("ADD");
+	
+	//Enter Series view compoenets
+	public JTextField seriesTitleField;
+	public JTextField seriesStartYearField;
+	public JTextField seriesEndYearField;
+	public JButton addSeriesButton = new JButton("ADD");
 	
 	
-	public void setView(InputWindowsView view){
-		input = view;
+	//Enter Episode view compoenets
+	public JTextField episodeSeriesTitleField;
+	public JTextField episodeStartYearField;
+	public JTextField episodeEndYearField;
+	public JTextField episodeTitleField;
+	public JTextField episodeNumField;
+	public JButton addEpisodeButton = new JButton("ADD");
+	
+	//Enter Actor view components
+	public JTextField actorNameField;
+	public JTextField actorTitleField;
+	public JTextField actorYearField;
+	public JTextField actorEpisodeTitleField;
+	public JTextField actorEpisodeNumberField;
+	public JTextField actorTypeField;
+	public JTextField actorRoleField;
+	public JTextField actorArchiveFootageField;
+	public JTextField actorCreditField;
+	public JTextField actorCharNameField;
+	public JTextField actorBillingOrderField;
+	JButton addActorButton = new JButton("ADD");
+	
+	//Enter director view components
+	public JTextField directorNameField;
+	public JTextField directorTitleField;
+	public JTextField directorYearField;
+	public JTextField directorEpisodeTitleField;
+	public JTextField directorEpisodeNumberField;
+	public JTextField directorTypeField;
+	public JTextField directorCreditField;
+	JButton addDirectorButton = new JButton("ADD");
+	
+	//Enter Producer view Components
+	public JTextField producerNameField;
+	public JTextField producerTitleField;
+	public JTextField producerYearField;
+	public JTextField producerEpisodeTitleField;
+	public JTextField producerEpisodeNumberField;
+	public JTextField producerTypeField;
+	public JTextField producerCreditField;
+	public JTextField producerRoleField;
+	JButton addProducerButton = new JButton("ADD");
+	
+	//edit Movie View Components
+	public JTextField movieEditorTitleField;
+	public JTextField movieEditorYearField;
+	public JTextField ronNumEditorField;
+	public JTextField venueEditorField;
+	public JButton editMovieButton = new JButton("EDIT");
+	
+	//edit Series View Components
+	public JTextField seriesEditorTitleField;
+	public JTextField seriesEditorStartYearField;
+	public JTextField seriesEditorEndYearField;
+	public JButton editSeriesButton = new JButton("EDIT");
+	
+	//edit Episode view Components
+	public JTextField episodeEditorSeriesTitleField;
+	public JTextField episodeEditorStartYearField;
+	public JTextField episodeEditorEndYearField;
+	public JTextField episodeEditorTitleField;
+	public JTextField episodeEditorNumField;
+	public JButton editEpisodeButton = new JButton("EDIT");
+	
+	//edit Actor view compoenents
+	public JTextField actorEditorNameField;
+	public JTextField actorEditorTitleField;
+	public JTextField actorEditorYearField;
+	public JTextField actorEditorEpisodeTitleField;
+	public JTextField actorEditorEpisodeNumberField;
+	public JTextField actorEditorTypeField;
+	public JTextField actorEditorRoleField;
+	public JTextField actorEditorArchiveFootageField;
+	public JTextField actorEditorCreditField;
+	public JTextField actorEditorCharNameField;
+	public JTextField actorEditorBillingOrderField;
+	JButton editActorButton = new JButton("EDIT");
+	
+	//edit Director components
+	public JTextField directorEditorNameField;
+	public JTextField directorEditorTitleField;
+	public JTextField directorEditorYearField;
+	public JTextField directorEditorEpisodeTitleField;
+	public JTextField directorEditorEpisodeNumberField;
+	public JTextField directorEditorTypeField;
+	public JTextField directorEditorCreditField;
+	JButton editDirectorButton = new JButton("EDIT");
+	
+	//edit Producer components
+	public JTextField producerEditorNameField;
+	public JTextField producerEditorTitleField;
+	public JTextField producerEditorYearField;
+	public JTextField producerEditorEpisodeTitleField;
+	public JTextField producerEditorEpisodeNumberField;
+	public JTextField producerEditorTypeField;
+	public JTextField producerEditorCreditField;
+	public JTextField producerEditorRoleField;
+	JButton editProducerButton = new JButton("EDIT");
+	
+	//list of frame
+	ArrayList<JFrame> frameList = new ArrayList<JFrame>();
+	ArrayList<JFrame> editorFrameList = new ArrayList<JFrame>();
+	
+	//add frames
+	JFrame movieFrame = new JFrame();
+	JFrame seriesFrame = new JFrame();
+	JFrame episodeFrame = new JFrame();
+	JFrame actorFrame = new JFrame();
+	JFrame directorFrame = new JFrame();
+	JFrame producerFrame = new JFrame();
+	
+	//edit  frame
+	JFrame movieEditorFrame = new JFrame();
+	JFrame seriesEditorFrame = new JFrame();
+	JFrame episodeEditorFrame = new JFrame();
+	JFrame actorEditorFrame = new JFrame();
+	JFrame directorEditorFrame = new JFrame();
+	JFrame producerEditorFrame = new JFrame();
+	
+	/**Files Type*/
+	final String[] FILE_TYPE = {"movie", "series", "episode", "actor", "director", "producer"};
+	/**Index point to Files Type*/
+	int typeIndex;
+	int selectedIndex;
+	Movie selectedMovie;
+	TVSeries selectedSeries;
+	Episode selectedEpisode;
+	Creator selectedCreator;
+	
+	public InputWindowsView(){
 		
-		input.addLoadFilesActionListener(new LoadFilesListener());
-		input.addImportActionListener(new ImportFilesListener());
-		input.addSaveActionListener(new SaveFileListener());
-		input.addExportActionListener(new ExportFileListener());
-		input.addAddMovieActionListener(new AddMovieListener());
-		input.addAddSeriesActionListener(new AddSeriesListener());
-		input.addAddEpisodeActionListener(new AddEpisodeListener());
-		input.addAddActorActionListener(new AddActorListener());
-		input.addAddDirectorActionListener(new AddDirectorListener());
-		input.addAddProducerActionListener(new AddProducerListener());
+		//add Addor Frame into list  
+		addMovieFrame(movieFrame);
+		addSeriesFrame(seriesFrame);
+		addEpisodeFrame(episodeFrame);
+		addActorFrame(actorFrame);
+		addDirectorFrame(directorFrame);
+		addProducerFrame(producerFrame);
+		
+		//create list editor frame
+		editorFrameList.add(editMovieFrame());
+		editorFrameList.add(editSeriesFrame());
+		editorFrameList.add(editEpisodeFrame());
+		editorFrameList.add(editActorFrame());
+		editorFrameList.add(editDirectorFrame());
+		editorFrameList.add(editProducerFrame());
+		
+		setTitle("MDb");
+		setLayout(new BorderLayout());
+		addSeletActionListener(new SelectListener());
 		
 		
+		load.setToolTipText("Read files which in using object I/O. ");
+		fileMenu.add(load);
+		
+		save.setToolTipText("Output data files using object I/O.");
+		save.setEnabled(false);
+		fileMenu.add(save);
+	
+		importItem.setToolTipText("Read data from text files.(It will be active after select radio button)");
+		importItem.addActionListener(new SaveFilesListener());
+		fileMenu.add(importItem);
+		
+		export.setEnabled(false);
+		export.setToolTipText("Export data as text files.");
+		fileMenu.add(export);
+		menuBar.add(fileMenu);
+		
+		add.setToolTipText("It will active when you select which types of data you want to add.");
+		add.setEnabled(false);
+		add.addActionListener(new AddDataListener());
+		editMenu.add(add);
+		
+		edit.setEnabled(false);
+		edit.addActionListener(new EditDataListener());
+		edit.setToolTipText("Edit the selected data in the right output area\n, it will be inative onece specified data seleted");
+		
+		delete.setEnabled(false);
+		delete.setToolTipText("Delet the exist related object and data from system, "
+				+ "it will be inative onece data loaded, imported or added.");
+		
+		clear.setEnabled(false);
+		clear.setToolTipText("Clean the exist related objects from system,"
+				+ " it will be inative onece data loaded, imported or added.");
+		
+		clearAll.setToolTipText("Clean all the exist objects. "
+				+ "it will be inative onece data loaded, imported or added.");
+		clearAll.setEnabled(false);
+		
+		
+		editMenu.add(edit);
+		editMenu.add(delete);
+		editMenu.add(clear);
+		editMenu.add(clearAll);
+		menuBar.add(editMenu);
+		
+		menuBar.add(displayMenu);
+		displayMenu.add(pieChart);
+		displayMenu.add(histogram);
+		add(menuBar, BorderLayout.PAGE_START);
+		
+		JPanel jplButtons = new JPanel(new GridLayout(9, 0, 5, 30));
+		JLabel seletLabel = new JLabel("    Seletion");
+		jplButtons.add(seletLabel);
+		
+		mediaButton.setToolTipText("Cannot be import or add");
+		makersButton.setToolTipText("Cannot be import or add");
+		
+		mediaButton.setActionCommand("Media");
+		movieButton.setActionCommand("Movie");
+		seriesButton.setActionCommand("Series");
+		episodeButton.setActionCommand("Episode");
+		makersButton.setActionCommand("Makers");
+		actorsButton.setActionCommand("Actors");
+		directorsButton.setActionCommand("Directors");
+		producersButton.setActionCommand("Producers");
+		
+		buttonList.add(mediaButton);
+		buttonList.add(movieButton);
+		buttonList.add(seriesButton);
+		buttonList.add(episodeButton);
+		buttonList.add(makersButton);
+		buttonList.add(actorsButton);
+		buttonList.add(directorsButton);
+		buttonList.add(producersButton);
+		
+		ButtonGroup buttons = new ButtonGroup();
+		buttons.add(mediaButton);
+		buttons.add(movieButton);
+		buttons.add(seriesButton);
+		buttons.add(episodeButton);
+		buttons.add(makersButton);
+		buttons.add(actorsButton);
+		buttons.add(directorsButton);
+		buttons.add(producersButton);
+		
+		
+		jplButtons.add(mediaButton);
+		jplButtons.add(movieButton);
+		jplButtons.add(seriesButton);
+		jplButtons.add(episodeButton);
+		jplButtons.add(makersButton);
+		jplButtons.add(actorsButton);
+		jplButtons.add(directorsButton);
+		jplButtons.add(producersButton);
+		
+		JScrollPane buttonScroll = new JScrollPane(jplButtons);
+		add(buttonScroll, BorderLayout.LINE_START);
+		
+		JPanel jplOutput = new JPanel(new GridBagLayout());
+		GridBagConstraints layoutConst = new GridBagConstraints();
+		layoutConst.gridx = 0;
+		layoutConst.gridy = 0;
+		layoutConst.anchor = GridBagConstraints.CENTER;
+		
+		jplOutput.add(outputLabel, layoutConst);
+		
+		objectList.setFixedCellWidth(600);
+		layoutConst = new GridBagConstraints();
+		layoutConst.gridx = 0;
+		layoutConst.gridy = 1;
+		layoutConst.fill = GridBagConstraints.BOTH;
+		layoutConst.weightx = 1.0;
+		layoutConst.weighty = 1.0;
+		layoutConst.anchor = GridBagConstraints.CENTER;
+		jplOutput.add(outputScroll, layoutConst);
+		add(jplOutput, BorderLayout.CENTER);
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);
+		pack();
 	}
 	
+
 	
-	private class LoadFilesListener implements ActionListener{
+	
+	private class SaveFilesListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e){
-			input.filesChooser.setMultiSelectionEnabled(true);
-			FileNameExtensionFilter filter = new FileNameExtensionFilter("OBJECT I/O FIELS", "text", "text");
-			input.filesChooser.setFileFilter(filter);
-			input.filesChooser.showOpenDialog(input.load);
-			input.filesChooser.getSelectedFile();
-			//TODO model load I/O Object files 
-
+			//TODO Ouput Object I/O files
 		}
 	}
 	
-	private class SaveFileListener implements ActionListener{
+	private class CancelListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e){
-			input.filesChooser.showSaveDialog(null);
-			//TODO save binary files
+			if(e.getActionCommand().equals("movie")) frameList.get(0).dispose();
+			if(e.getActionCommand().equals("series")) frameList.get(1).dispose();
+			if(e.getActionCommand().equals("episode")) frameList.get(2).dispose();
+			if(e.getActionCommand().equals("actor")) frameList.get(3).dispose();
+			if(e.getActionCommand().equals("director")) frameList.get(4).dispose();
+			if(e.getActionCommand().equals("producer")) frameList.get(5).dispose();
 		}
 	}
 	
-	private class ExportFileListener implements ActionListener{
+	private class AddDataListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e){
-			input.filesChooser.showSaveDialog(null);
-			//TODO export txt files
-			
+			int i = 0;
+			for(JRadioButton b : buttonList){
+				if(b.isSelected()){
+					if(i >= 5){
+						frameList.get(i - 2).setVisible(true);
+					}
+					else{
+						frameList.get(i - 1).setVisible(true);
+					}
+				}
+				i++;
+			}
 		}
 	}
 	
-	
-	private class ImportFilesListener implements ActionListener{
-		@Override 
+	private class EditDataListener implements ActionListener{
+		@Override
 		public void actionPerformed(ActionEvent e){
-			String[] choose = {"Movie", "Series", "Episode", "Actor", "Director", "Producer"};
-			String fileType = (String)JOptionPane.showInputDialog(null, "Choose file type...", 
-					"Choose what type files you want to import", JOptionPane.QUESTION_MESSAGE, null
-					,choose, choose[0]);
-			if(fileType != null){ 
-				input.filesChooser.showOpenDialog(input);
-				//TODO  import files
+			selectedIndex = objectList.getSelectedIndex();
+			if(selectedIndex < 0){
+				JOptionPane.showMessageDialog(null, "Select one Object in outputArea before edit.");
+				return;
+			}
+			//TODO 
+			for(int i = 0; i < buttonList.size(); i++){
+				if(buttonList.get(i).isSelected()){
+					if(i == 1){
+						selectedMovie = (Movie) objectList.getSelectedValue();
+						movieEditorTitleField.setText(selectedMovie.getName());
+						movieEditorYearField.setText(selectedMovie.getYear());
+						ronNumEditorField.setText("Really dont know");
+						venueEditorField.setText("what?");
+						editorFrameList.get(i - 1).setVisible(true);
+						
+						break;
+					}
+					else if(i == 2){
+						selectedSeries = (TVSeries) objectList.getSelectedValue();
+						seriesEditorTitleField.setText(selectedSeries.getName());
+						seriesEditorStartYearField.setText(selectedSeries.getYear());
+						seriesEditorEndYearField.setText(selectedSeries.getEndYear());
+						editorFrameList.get(i - 1).setVisible(true);
+					}
+					else if(i == 3){
+						selectedEpisode = (Episode) objectList.getSelectedValue();
+						episodeEditorSeriesTitleField.setText(selectedEpisode.series.getName());
+						episodeEditorStartYearField.setText(selectedEpisode.getYear());
+						episodeEditorEndYearField.setText(selectedEpisode.getEndYear());
+						episodeEditorTitleField.setText(selectedEpisode.getName());
+						episodeEditorNumField.setText(selectedEpisode.episodeNumber);
+						editorFrameList.get(i - 1).setVisible(true);
+						break;
+					}
+					else if( i == 5) {
+						selectedCreator = (Creator) objectList.getSelectedValue();
+						actorEditorNameField.setText(selectedCreator.getName());
+						actorEditorTitleField.setText(selectedCreator.getTitle());
+						actorEditorYearField.setText(selectedCreator.getYear());
+						actorEditorEpisodeTitleField.setText(selectedCreator.getEpisodeTitle());
+						actorEditorEpisodeNumberField.setText(selectedCreator.getEpisodeNumber());
+						actorEditorTypeField.setText(selectedCreator.getType());
+						actorEditorRoleField.setText(selectedCreator.getRole());
+						actorEditorArchiveFootageField.setText(selectedCreator.getArchiveFootage());
+						actorEditorCreditField.setText(selectedCreator.getCredit());
+						actorEditorCharNameField.setText(selectedCreator.getCharName());
+						actorEditorBillingOrderField.setText(selectedCreator.getBillingOrder());
+						editorFrameList.get(i - 2).setVisible(true);
+						break;
+					}
+					else if(i == 6){
+						selectedCreator = (Creator) objectList.getSelectedValue();
+						directorEditorNameField.setText(selectedCreator.getName());
+						directorEditorTitleField.setText(selectedCreator.getTitle());
+						directorEditorYearField.setText(selectedCreator.getYear());
+						directorEditorEpisodeTitleField.setText(selectedCreator.getEpisodeTitle());
+						directorEditorEpisodeNumberField.setText(selectedCreator.getEpisodeNumber());
+						directorEditorTypeField.setText(selectedCreator.getType());
+						directorEditorCreditField.setText(selectedCreator.getCredit());
+						editorFrameList.get(i - 2).setVisible(true);
+						break;
+					}
+					else if(i == 7){
+						selectedCreator = (Creator) objectList.getSelectedValue();
+						producerEditorNameField.setText(selectedCreator.getName());
+						producerEditorTitleField.setText(selectedCreator.getTitle());
+						producerEditorYearField.setText(selectedCreator.getYear());
+						producerEditorEpisodeTitleField.setText(selectedCreator.getEpisodeTitle());
+						producerEditorEpisodeNumberField.setText(selectedCreator.getEpisodeNumber());
+						producerEditorTypeField.setText(selectedCreator.getType());
+						producerEditorCreditField.setText(selectedCreator.getCredit());
+						producerEditorRoleField.setText(selectedCreator.getRole());
+						editorFrameList.get(i - 2).setVisible(true);
+						break;
+					}
+				}
 			}
 		}
 	}
 	
 	
-	
-	private class AddMovieListener implements ActionListener{
+	private class SelectListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			String title = input.movieTitleField.getText();
-			String year = "";
-			String ronNum = "";
-			String venue = "";
-			
-			year = input.movieYearField.getText();
-			if(input.movieYearField.getText().isEmpty()){
-				year = "????";
-				System.out.println(year);
-			}
-			ronNum = input.ronNumField.getText();
-			venue = input.venueField.getText();
-			
-			//clean the field after add into model 
-			input.movieTitleField.setText(null);
-			input.movieYearField.setText(null);
-			input.ronNumField.setText(null);
-			input.venueField.setText(null);
-			JOptionPane.showMessageDialog(null, "Add successful.");
-			
-			//TODO add into model	
-			
-		}
-	}
-	
-	private class AddSeriesListener implements ActionListener{
-		@Override
-		public void actionPerformed(ActionEvent event) {
-			String title = input.seriesTitleField.getText();
-			String startYear = "";
-			String endYear = "";
-			
-			startYear = input.seriesStartYearField.getText();
-			if(input.seriesStartYearField.getText().isEmpty()){
-				startYear = "????";
-				System.out.println("Series added");//test
-			}
-			endYear = input.seriesEndYearField.getText();
-			if(input.seriesEndYearField.getText().isEmpty()){
-				endYear = "????";
-			}
-			
-			//clean the field after add into model 
-			input.seriesTitleField.setText(null);
-			input.seriesStartYearField.setText(null);
-			input.seriesEndYearField.setText(null);
-			JOptionPane.showMessageDialog(null, "Add successful.");
-			
-			//TODO add into model	
-			
-		}
-	}
-	
-	
-	
-	private class AddEpisodeListener implements ActionListener{
-		@Override
-		public void actionPerformed(ActionEvent event) {
-			String title = input.episodeTitleField.getText();
-			String episodeTitle = input.episodeTitleField.getText();
-			String startYear = "";
-			String endYear = "";
-			String episodeNum = input.episodeNumField.getText();
-			
-			startYear = input.episodeStartYearField.getText();
-			if(input.episodeStartYearField.getText().isEmpty()){
-				startYear = "????";
-				System.out.println("Series added");//test
-			}
-			endYear = input.episodeEndYearField.getText();
-			if(input.episodeEndYearField.getText().isEmpty()){
-				endYear = "????";
-			}
-			
-			
-			//clean the field after add into model 
-			input.episodeTitleField.setText(null);
-			input.episodeTitleField.setText(null);
-			input.episodeStartYearField.setText(null);
-			input.episodeEndYearField.setText(null);
-			input.episodeNumField.setText(null);
-			JOptionPane.showMessageDialog(null, "Add successful.");
-			
-			//TODO add into model	
-			
-		}
-	}
-	
-	private class AddActorListener implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent event) {
-			
-			String name = input.actorNameField.getText();
-			String title = input.actorTitleField.getText();
-			String year = input.actorYearField.getText();
-			String episodeTitle = input.actorEpisodeTitleField.getText();
-			String episodeNum = input.actorEpisodeNumberField.getText();
-			String type = input.actorTitleField.getText();
-			String role = input.actorRoleField.getText();
-			String achiveFootage = input.actorArchiveFootageField.getText();
-			String credit = input.actorCreditField.getText();
-			String charName = input.actorCharNameField.getText();
-			String billingOrder = input.actorBillingOrderField.getText();
-			
-			//TODO pass paramaters into model add Actor
-		}
+			String title = "";
+			selectString = "";
+			int i = 0;
 		
+			for(JRadioButton b : buttonList){
+				if(b.isSelected()){
+					title = title + b.getActionCommand() + ", ";
+					i++;
+				}
+			}
+			if(title.contains(",")) title = title.substring(0, title.length() - 2);
+			if(i == 0) title = "Output Titile";
+			outputLabel.setText(title);
+			
+			if((!mediaButton.isSelected() && !makersButton.isSelected()) && i > 0){
+				add.setEnabled(true);
+
+			}
+			else{
+				add.setEnabled(false);
+			}
+			if(mediaButton.isSelected() || makersButton.isSelected()) edit.setEnabled(false);
+			
+			
+	
+		}
 	}
 	
-	private class AddDirectorListener implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent event) {
-			
-			String name = input.directorNameField.getText();
-			String title = input.directorTitleField.getText();
-			String year = input.directorYearField.getText();
-			String episodeTitle = input.directorEpisodeTitleField.getText();
-			String episodeNum = input.directorEpisodeNumberField.getText();
-			String type = input.directorTitleField.getText();
-			String credit = input.directorCreditField.getText();
-			
-			//TODO pass paramaters into model add Actor
-		}
-		
+		public void addSeletActionListener(ActionListener e){
+		mediaButton.addActionListener(e);
+		movieButton.addActionListener(e);
+		seriesButton.addActionListener(e);
+		episodeButton.addActionListener(e);
+		makersButton.addActionListener(e);
+		actorsButton.addActionListener(e);
+		directorsButton.addActionListener(e);
+		producersButton.addActionListener(e);
 	}
 	
-
-	private class AddProducerListener implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent event) {
-			
-			String name = input.producerNameField.getText();
-			String title = input.producerTitleField.getText();
-			String year = input.producerYearField.getText();
-			String episodeTitle = input.producerEpisodeTitleField.getText();
-			String episodeNum = input.producerEpisodeNumberField.getText();
-			String type = input.producerTitleField.getText();
-			String role = input.producerRoleField.getText();
-			String credit = input.producerCreditField.getText();
-			
-			//TODO pass paramaters into model add Actor
-		}
-		
+	public void addAddMovieActionListener(ActionListener e){
+		addMovieButton.addActionListener(e);
 	}
+	
+	public void addAddSeriesActionListener(ActionListener e){
+		addSeriesButton.addActionListener(e);
+	}
+	
+	public void addAddEpisodeActionListener(ActionListener e){
+		addEpisodeButton.addActionListener(e);
+	}
+	
+	public void addAddActorActionListener(ActionListener e){
+		addActorButton.addActionListener(e);
+	}
+	
+	public void addAddDirectorActionListener(ActionListener e){
+		addDirectorButton.addActionListener(e);
+	}
+	
+	public void addAddProducerActionListener(ActionListener e){
+		addProducerButton.addActionListener(e);
+	}
+	
+	public void addLoadFilesActionListener(ActionListener e){
+		load.addActionListener(e);
+	}
+	
+	public void addSaveActionListener(ActionListener e){
+		save.addActionListener(e);
+	}
+	
+	public void addImportActionListener(ActionListener e){
+		importItem.addActionListener(e);
+	}
+	
+	public void addExportActionListener(ActionListener e){
+		export.addActionListener(e);
+	}
+	
+	
+	public void addEditMovieActionListener(ActionListener e){
+		editMovieButton.addActionListener(e);
+	}
+	
+	public void addEditSeriesActionListener(ActionListener e){
+		editSeriesButton.addActionListener(e);
+	}
+	
+	public void addEditEpisodeActionListener(ActionListener e){
+		editEpisodeButton.addActionListener(e);
+	}
+	
+	public void addEditActorActionListener(ActionListener e){
+		editActorButton.addActionListener(e);
+	}
+	
+	public void addEditDirectorActionListener(ActionListener e){
+		editDirectorButton.addActionListener(e);
+	}
+	
+	public void addEditProducerActionListener(ActionListener e){
+		editProducerButton.addActionListener(e);
+	}
+	
+	public void addDeleteActionListener(ActionListener e){
+		delete.addActionListener(e);
+	}
+	
+	public void addClearActionListener(ActionListener e){
+		clear.addActionListener(e);
+	}
+	
+	public void addClearAllActionListener(ActionListener e){
+		clearAll.addActionListener(e);
+	}
+	
+	public void addPieChartActionListener(ActionListener e){
+		pieChart.addActionListener(e);
+	}
+	
+	public void addhistogramActionListener(ActionListener e){
+		histogram.addActionListener(e);
+	}
+	
+	
+	
+	private void addMovieFrame(JFrame frame){
+		frame = new JFrame("Add movie");
+		JButton noButton = new JButton("CANCEL");
+		noButton.setActionCommand("movie");
+		noButton.addActionListener(new CancelListener());
+		
+		JPanel jplEnter = new JPanel(new GridLayout(5, 0, 5, 10));
+		JLabel titleLabel = new JLabel("Title: ", JLabel.RIGHT);
+		movieTitleField = new JTextField(20);
+		jplEnter.add(titleLabel);
+		jplEnter.add(movieTitleField);
+		
+		JLabel yearLabel = new JLabel("Year: ", JLabel.RIGHT);
+		movieYearField = new JTextField(20);
+		jplEnter.add(yearLabel);
+		jplEnter.add(movieYearField);
+		
+		JLabel venueLabel = new JLabel("venue: ", JLabel.RIGHT);
+		venueField = new JTextField(20);
+		jplEnter.add(venueLabel);
+		jplEnter.add(venueField);
+		
+		JLabel ronManlabel = new JLabel("Roman Number: ", JLabel.RIGHT);
+		ronNumField = new JTextField(20);
+		jplEnter.add(ronManlabel);
+		jplEnter.add(ronNumField);
+		
+		jplEnter.add(addMovieButton);
+		jplEnter.add(noButton);
+		frame.add(jplEnter);
+		frame.setResizable(false);
+		frame.pack();
+		
+		frameList.add(frame);
+	}
+	
+	private void addSeriesFrame (JFrame frame){
+		JButton noButton = new JButton("CANCEL");
+		noButton.setActionCommand("series");
+		noButton.addActionListener(new CancelListener());
+		
+		frame = new JFrame("Add Series");
+		JLabel titleLabel = new JLabel("Series Title: ", JLabel.RIGHT);
+		JLabel startYearLabel = new JLabel("Start Year: ", JLabel.RIGHT);
+		JLabel endYearLabel = new JLabel("End Year: ", JLabel.RIGHT);
+		
+		JPanel jplEnter = new JPanel(new GridLayout(4, 0, 5, 10));
+		seriesTitleField = new JTextField(20);
+		jplEnter.add(titleLabel);
+		jplEnter.add(seriesTitleField);
+		
+		seriesStartYearField = new JTextField(20);
+		jplEnter.add(startYearLabel);
+		jplEnter.add(seriesStartYearField);
+		
+		seriesEndYearField = new JTextField(20);
+		jplEnter.add(endYearLabel);
+		jplEnter.add(seriesEndYearField);
+		
+		jplEnter.add(addSeriesButton);
+		jplEnter.add(noButton);
+		
+		frame.add(jplEnter);
+		frame.setResizable(false);
+		frame.pack();
+		frameList.add(frame);
+	}
+	
+	private void addEpisodeFrame(JFrame frame){
+		JButton noButton = new JButton("CANCEL");
+		noButton.addActionListener(new CancelListener());
+		noButton.setActionCommand("episode");
+		
+		frame = new JFrame("Add Episode");
+		
+		JPanel jplEnter = new JPanel(new GridLayout(6, 0, 5, 10));
+		JLabel seriesTitleLabel = new JLabel("Series Title: ", JLabel.RIGHT);
+		episodeSeriesTitleField = new JTextField(20);
+		jplEnter.add(seriesTitleLabel);
+		jplEnter.add(episodeSeriesTitleField);
+		
+		JLabel episodeTitleabel = new JLabel("Episode Title: ", JLabel.RIGHT);
+		episodeTitleField = new JTextField(20);
+		jplEnter.add(episodeTitleabel);
+		jplEnter.add(episodeTitleField);
+		
+		JLabel startYearLabel = new JLabel("Start Year: ", JLabel.RIGHT);
+		episodeStartYearField = new JTextField(20);
+		jplEnter.add(startYearLabel);
+		jplEnter.add(episodeStartYearField);
+		
+		JLabel endYearLabel = new JLabel("End Year: ", JLabel.RIGHT);
+		episodeEndYearField = new JTextField(20);
+		jplEnter.add(endYearLabel);
+		jplEnter.add(episodeEndYearField);
+		
+		JLabel episodeLabel = new JLabel("Episode Number: ", JLabel.RIGHT);
+		episodeNumField = new JTextField(20);
+		jplEnter.add(episodeLabel);
+		jplEnter.add(episodeNumField);
+		
+		jplEnter.add(addEpisodeButton);
+		jplEnter.add(noButton);
+		frame.add(jplEnter);
+		frame.setResizable(true);
+		frame.pack();
+		frameList.add(frame);
+	}
+	
+	private void addActorFrame(JFrame frame){
+		frame = new JFrame("Add Actor");
+		
+		JPanel jplEnter = new JPanel(new GridLayout(12, 0, 5, 5));
+		
+		JButton noButton = new JButton("CANCEL");
+		noButton.setActionCommand("actor");
+		noButton.addActionListener(new CancelListener());
+		
+		actorNameField = new JTextField(20);
+		JLabel nameLabel = new JLabel("Actor Name: ", JLabel.RIGHT);
+		jplEnter.add(nameLabel);
+		jplEnter.add(actorNameField);
+		
+		actorTitleField = new JTextField(20);
+		JLabel titleLabel = new JLabel("Title: ", JLabel.RIGHT);
+		jplEnter.add(titleLabel);
+		jplEnter.add(actorTitleField);
+		
+		actorYearField = new JTextField(20);
+		JLabel yearLabel = new JLabel("Year: ", JLabel.RIGHT);
+		jplEnter.add(yearLabel);
+		jplEnter.add(actorYearField);
+		
+		actorEpisodeTitleField = new JTextField(20);
+		JLabel episodeTitleLabel = new JLabel("Episode Title: ", JLabel.RIGHT);
+		jplEnter.add(episodeTitleLabel);
+		jplEnter.add(actorEpisodeTitleField);
+		
+		actorEpisodeNumberField = new JTextField(20);
+		JLabel episodeNumLabel = new JLabel("Episode Number: ", JLabel.RIGHT);
+		jplEnter.add(episodeNumLabel);
+		jplEnter.add(actorEpisodeNumberField);
+		
+		actorTypeField = new JTextField(20);
+		JLabel type = new JLabel("Venue: ", JLabel.RIGHT);
+		jplEnter.add(type);
+		jplEnter.add(actorTypeField);
+		
+		actorRoleField = new JTextField(20);
+		JLabel role = new JLabel("Role: ", JLabel.RIGHT);
+		jplEnter.add(role);
+		jplEnter.add(actorRoleField);
+		
+		actorArchiveFootageField = new JTextField(20);
+		JLabel footage = new JLabel("Achive Footage: ", JLabel.RIGHT);
+		jplEnter.add(footage);
+		jplEnter.add(actorArchiveFootageField);
+		
+		actorCreditField = new JTextField(20);
+		JLabel creditLabel = new JLabel("Credit: ", JLabel.RIGHT);
+		jplEnter.add(creditLabel);
+		jplEnter.add(actorCreditField);
+		
+		actorCharNameField = new JTextField(20);
+		JLabel charNameLabel = new JLabel("Char Name: ", JLabel.RIGHT);
+		jplEnter.add(charNameLabel);
+		jplEnter.add(actorCharNameField);
+		
+		actorBillingOrderField = new JTextField(20);
+		JLabel billingOrderLabel = new JLabel("Billing Order: ", JLabel.RIGHT);
+		jplEnter.add(billingOrderLabel);
+		jplEnter.add(actorBillingOrderField);
+		
+		jplEnter.add(addActorButton);
+		jplEnter.add(noButton);
+		
+		frame.add(jplEnter);
+		frame.setResizable(false);
+		frame.pack();
+		frameList.add(frame);
+	}
+	
+	private void addDirectorFrame(JFrame frame){
+		frame = new JFrame("Add Director");
+		
+		JPanel jplEnter = new JPanel(new GridLayout(8, 0, 5, 5));
+		
+		JButton noButton = new JButton("CANCEL");
+		noButton.setActionCommand("director");
+		noButton.addActionListener(new CancelListener());
+		
+		directorNameField = new JTextField(20);
+		JLabel nameLabel = new JLabel("Director Name: ", JLabel.RIGHT);
+		jplEnter.add(nameLabel);
+		jplEnter.add(directorNameField);
+		
+		directorTitleField = new JTextField(20);
+		JLabel titleLabel = new JLabel("Title: ", JLabel.RIGHT);
+		jplEnter.add(titleLabel);
+		jplEnter.add(directorTitleField);
+		
+		directorYearField = new JTextField(20);
+		JLabel yearLabel = new JLabel("Year: ", JLabel.RIGHT);
+		jplEnter.add(yearLabel);
+		jplEnter.add(directorYearField);
+		
+		directorEpisodeTitleField = new JTextField(20);
+		JLabel episodeTitleLabel = new JLabel("Episode Title: ", JLabel.RIGHT);
+		jplEnter.add(episodeTitleLabel);
+		jplEnter.add(directorEpisodeTitleField);
+		
+		directorEpisodeNumberField = new JTextField(20);
+		JLabel episodeNumLabel = new JLabel("Episode Number: ", JLabel.RIGHT);
+		jplEnter.add(episodeNumLabel);
+		jplEnter.add(directorEpisodeNumberField);
+		
+		directorTypeField = new JTextField(20);
+		JLabel type = new JLabel("Venue: ", JLabel.RIGHT);
+		jplEnter.add(type);
+		jplEnter.add(directorTypeField);
+		
+		directorCreditField = new JTextField(20);
+		JLabel creditLabel = new JLabel("Credit: ", JLabel.RIGHT);
+		jplEnter.add(creditLabel);
+		jplEnter.add(directorCreditField);
+		
+		jplEnter.add(addDirectorButton);
+		jplEnter.add(noButton);
+		
+		frame.add(jplEnter);
+		frame.setResizable(false);
+		frame.pack();
+		frameList.add(frame);
+	}
+	
+	private void addProducerFrame(JFrame frame){
+		frame = new JFrame("Add Producer");
+		
+		JPanel jplEnter = new JPanel(new GridLayout(9, 0, 5, 5));
+		
+		JButton noButton = new JButton("CANCEL");
+		noButton.setActionCommand("producer");
+		noButton.addActionListener(new CancelListener());
+		
+		producerNameField = new JTextField(20);
+		JLabel nameLabel = new JLabel("Producer Name: ", JLabel.RIGHT);
+		jplEnter.add(nameLabel);
+		jplEnter.add(producerNameField);
+		
+		producerTitleField = new JTextField(20);
+		JLabel titleLabel = new JLabel("Title: ", JLabel.RIGHT);
+		jplEnter.add(titleLabel);
+		jplEnter.add(producerTitleField);
+		
+		producerYearField = new JTextField(20);
+		JLabel yearLabel = new JLabel("Year: ", JLabel.RIGHT);
+		jplEnter.add(yearLabel);
+		jplEnter.add(producerYearField);
+		
+		producerEpisodeTitleField = new JTextField(20);
+		JLabel episodeTitleLabel = new JLabel("Episode Title: ", JLabel.RIGHT);
+		jplEnter.add(episodeTitleLabel);
+		jplEnter.add(producerEpisodeTitleField);
+		
+		producerEpisodeNumberField = new JTextField(20);
+		JLabel episodeNumLabel = new JLabel("Episode Number: ", JLabel.RIGHT);
+		jplEnter.add(episodeNumLabel);
+		jplEnter.add(producerEpisodeNumberField);
+		
+		producerTypeField = new JTextField(20);
+		JLabel type = new JLabel("Venue: ", JLabel.RIGHT);
+		jplEnter.add(type);
+		jplEnter.add(producerTypeField);
+		
+		producerRoleField = new JTextField(20);
+		JLabel roleLabel = new JLabel("Role: ", JLabel.RIGHT);
+		jplEnter.add(roleLabel);
+		jplEnter.add(producerRoleField);
+		
+		producerCreditField = new JTextField(20);
+		JLabel creditLabel = new JLabel("Credit: ", JLabel.RIGHT);
+		jplEnter.add(creditLabel);
+		jplEnter.add(producerCreditField);
+		
+		jplEnter.add(addProducerButton);
+		jplEnter.add(noButton);
+		
+		frame.add(jplEnter);
+		frame.setResizable(false);
+		frame.pack();
+		frameList.add(frame);
+	}
+	
+	private JFrame editMovieFrame(){
+		JFrame frame = new JFrame("Edit Movie");
+		JButton noButton = new JButton("CANCEL");
+		noButton.setActionCommand("movie");
+		noButton.addActionListener(new CancelListener());
+		
+		JPanel jplEnter = new JPanel(new GridLayout(5, 0, 5, 10));
+		JLabel titleLabel = new JLabel("Title: ", JLabel.RIGHT);
+		movieEditorTitleField = new JTextField(20);
+		jplEnter.add(titleLabel);
+		jplEnter.add(movieEditorTitleField);
+		
+		JLabel yearLabel = new JLabel("Year: ", JLabel.RIGHT);
+		movieEditorYearField = new JTextField(20);
+		jplEnter.add(yearLabel);
+		jplEnter.add(movieEditorYearField);
+		
+		JLabel venueLabel = new JLabel("venue: ", JLabel.RIGHT);
+		venueEditorField = new JTextField(20);
+		jplEnter.add(venueLabel);
+		jplEnter.add(venueEditorField);
+		
+		JLabel ronManlabel = new JLabel("Roman Number: ", JLabel.RIGHT);
+		ronNumEditorField = new JTextField(20);
+		jplEnter.add(ronManlabel);
+		jplEnter.add(ronNumEditorField);
+		
+		jplEnter.add(editMovieButton);
+		jplEnter.add(noButton);
+		frame.add(jplEnter);
+		frame.setResizable(false);
+		frame.pack();
+		return frame;
+	}
+	
+	private JFrame editSeriesFrame (){
+		JButton noButton = new JButton("CANCEL");
+		noButton.setActionCommand("series");
+		noButton.addActionListener(new CancelListener());
+		
+		JFrame frame = new JFrame("Edit Series");
+		JLabel titleLabel = new JLabel("Series Title: ", JLabel.RIGHT);
+		JLabel startYearLabel = new JLabel("Start Year: ", JLabel.RIGHT);
+		JLabel endYearLabel = new JLabel("End Year: ", JLabel.RIGHT);
+		
+		JPanel jplEnter = new JPanel(new GridLayout(4, 0, 5, 10));
+		seriesEditorTitleField = new JTextField(20);
+		jplEnter.add(titleLabel);
+		jplEnter.add(seriesEditorTitleField);
+		
+		seriesEditorStartYearField = new JTextField(20);
+		jplEnter.add(startYearLabel);
+		jplEnter.add(seriesEditorStartYearField);
+		
+		seriesEditorEndYearField = new JTextField(20);
+		jplEnter.add(endYearLabel);
+		jplEnter.add(seriesEditorEndYearField);
+		
+		jplEnter.add(editSeriesButton);
+		jplEnter.add(noButton);
+		
+		frame.add(jplEnter);
+		frame.setResizable(false);
+		frame.pack();
+		return frame;
+	}
+	
+	private JFrame editEpisodeFrame(){
+		JButton noButton = new JButton("CANCEL");
+		noButton.addActionListener(new CancelListener());
+		noButton.setActionCommand("episode");
+		
+		JFrame frame = new JFrame("Edit Episode");
+		
+		JPanel jplEnter = new JPanel(new GridLayout(6, 0, 5, 10));
+		JLabel seriesTitleLabel = new JLabel("Series Title: ", JLabel.RIGHT);
+		episodeEditorSeriesTitleField = new JTextField(20);
+		jplEnter.add(seriesTitleLabel);
+		jplEnter.add(episodeEditorSeriesTitleField);
+		
+		JLabel episodeTitleabel = new JLabel("Episode Title: ", JLabel.RIGHT);
+		episodeEditorTitleField = new JTextField(20);
+		jplEnter.add(episodeTitleabel);
+		jplEnter.add(episodeEditorTitleField);
+		
+		JLabel startYearLabel = new JLabel("Start Year: ", JLabel.RIGHT);
+		episodeEditorStartYearField = new JTextField(20);
+		jplEnter.add(startYearLabel);
+		jplEnter.add(episodeEditorStartYearField);
+		
+		JLabel endYearLabel = new JLabel("End Year: ", JLabel.RIGHT);
+		episodeEditorEndYearField = new JTextField(20);
+		jplEnter.add(endYearLabel);
+		jplEnter.add(episodeEditorEndYearField);
+		
+		JLabel episodeLabel = new JLabel("Episode Number: ", JLabel.RIGHT);
+		episodeEditorNumField = new JTextField(20);
+		jplEnter.add(episodeLabel);
+		jplEnter.add(episodeEditorNumField);
+		
+		jplEnter.add(editEpisodeButton);
+		jplEnter.add(noButton);
+		frame.add(jplEnter);
+		frame.setResizable(true);
+		frame.pack();
+		return frame;
+	}
+
+	private JFrame editActorFrame(){
+		JFrame frame = new JFrame("Edit Actor");
+		
+		JPanel jplEnter = new JPanel(new GridLayout(12, 0, 5, 5));
+		
+		JButton noButton = new JButton("CANCEL");
+		noButton.setActionCommand("actor");
+		noButton.addActionListener(new CancelListener());
+		
+		actorEditorNameField = new JTextField(20);
+		JLabel nameLabel = new JLabel("Actor Name: ", JLabel.RIGHT);
+		jplEnter.add(nameLabel);
+		jplEnter.add(actorEditorNameField);
+		
+		actorEditorTitleField = new JTextField(20);
+		JLabel titleLabel = new JLabel("Title: ", JLabel.RIGHT);
+		jplEnter.add(titleLabel);
+		jplEnter.add(actorEditorTitleField);
+		
+		actorEditorYearField = new JTextField(20);
+		JLabel yearLabel = new JLabel("Year: ", JLabel.RIGHT);
+		jplEnter.add(yearLabel);
+		jplEnter.add(actorEditorYearField);
+		
+		actorEditorEpisodeTitleField = new JTextField(20);
+		JLabel episodeTitleLabel = new JLabel("Episode Title: ", JLabel.RIGHT);
+		jplEnter.add(episodeTitleLabel);
+		jplEnter.add(actorEditorEpisodeTitleField);
+		
+		actorEditorEpisodeNumberField = new JTextField(20);
+		JLabel episodeNumLabel = new JLabel("Episode Number: ", JLabel.RIGHT);
+		jplEnter.add(episodeNumLabel);
+		jplEnter.add(actorEditorEpisodeNumberField);
+		
+		actorEditorTypeField = new JTextField(20);
+		JLabel type = new JLabel("Venue: ", JLabel.RIGHT);
+		jplEnter.add(type);
+		jplEnter.add(actorEditorTypeField);
+		
+		actorEditorRoleField = new JTextField(20);
+		JLabel role = new JLabel("Role: ", JLabel.RIGHT);
+		jplEnter.add(role);
+		jplEnter.add(actorEditorRoleField);
+		
+		actorEditorArchiveFootageField = new JTextField(20);
+		JLabel footage = new JLabel("Achive Footage: ", JLabel.RIGHT);
+		jplEnter.add(footage);
+		jplEnter.add(actorEditorArchiveFootageField);
+		
+		actorEditorCreditField = new JTextField(20);
+		JLabel creditLabel = new JLabel("Credit: ", JLabel.RIGHT);
+		jplEnter.add(creditLabel);
+		jplEnter.add(actorEditorCreditField);
+		
+		actorEditorCharNameField = new JTextField(20);
+		JLabel charNameLabel = new JLabel("Char Name: ", JLabel.RIGHT);
+		jplEnter.add(charNameLabel);
+		jplEnter.add(actorEditorCharNameField);
+		
+		actorEditorBillingOrderField = new JTextField(20);
+		JLabel billingOrderLabel = new JLabel("Billing Order: ", JLabel.RIGHT);
+		jplEnter.add(billingOrderLabel);
+		jplEnter.add(actorEditorBillingOrderField);
+		
+		jplEnter.add(editActorButton);
+		jplEnter.add(noButton);
+		
+		frame.add(jplEnter);
+		frame.setResizable(false);
+		frame.pack();
+		return frame;
+	}
+	
+	private JFrame editDirectorFrame(){
+		JFrame frame = new JFrame("Edit Director");
+		
+		JPanel jplEnter = new JPanel(new GridLayout(8, 0, 5, 5));
+		
+		JButton noButton = new JButton("CANCEL");
+		noButton.setActionCommand("director");
+		noButton.addActionListener(new CancelListener());
+		
+		directorEditorNameField = new JTextField(20);
+		JLabel nameLabel = new JLabel("Director Name: ", JLabel.RIGHT);
+		jplEnter.add(nameLabel);
+		jplEnter.add(directorEditorNameField);
+		
+		directorEditorTitleField = new JTextField(20);
+		JLabel titleLabel = new JLabel("Title: ", JLabel.RIGHT);
+		jplEnter.add(titleLabel);
+		jplEnter.add(directorEditorTitleField);
+		
+		directorEditorYearField = new JTextField(20);
+		JLabel yearLabel = new JLabel("Year: ", JLabel.RIGHT);
+		jplEnter.add(yearLabel);
+		jplEnter.add(directorEditorYearField);
+		
+		directorEditorEpisodeTitleField = new JTextField(20);
+		JLabel episodeTitleLabel = new JLabel("Episode Title: ", JLabel.RIGHT);
+		jplEnter.add(episodeTitleLabel);
+		jplEnter.add(directorEditorEpisodeTitleField);
+		
+		directorEditorEpisodeNumberField = new JTextField(20);
+		JLabel episodeNumLabel = new JLabel("Episode Number: ", JLabel.RIGHT);
+		jplEnter.add(episodeNumLabel);
+		jplEnter.add(directorEditorEpisodeNumberField);
+		
+		directorEditorTypeField = new JTextField(20);
+		JLabel type = new JLabel("Venue: ", JLabel.RIGHT);
+		jplEnter.add(type);
+		jplEnter.add(directorEditorTypeField);
+		
+		directorEditorCreditField = new JTextField(20);
+		JLabel creditLabel = new JLabel("Credit: ", JLabel.RIGHT);
+		jplEnter.add(creditLabel);
+		jplEnter.add(directorEditorCreditField);
+		
+		jplEnter.add(editDirectorButton);
+		jplEnter.add(noButton);
+		
+		frame.add(jplEnter);
+		frame.setResizable(false);
+		frame.pack();
+		return frame;
+	}
+
+	private JFrame editProducerFrame(){
+		JFrame frame = new JFrame("Edit Producer");
+		
+		JPanel jplEnter = new JPanel(new GridLayout(9, 0, 5, 5));
+		
+		JButton noButton = new JButton("CANCEL");
+		noButton.setActionCommand("producer");
+		noButton.addActionListener(new CancelListener());
+		
+		producerEditorNameField = new JTextField(20);
+		JLabel nameLabel = new JLabel("Producer Name: ", JLabel.RIGHT);
+		jplEnter.add(nameLabel);
+		jplEnter.add(producerEditorNameField);
+		
+		producerEditorTitleField = new JTextField(20);
+		JLabel titleLabel = new JLabel("Title: ", JLabel.RIGHT);
+		jplEnter.add(titleLabel);
+		jplEnter.add(producerEditorTitleField);
+		
+		producerEditorYearField = new JTextField(20);
+		JLabel yearLabel = new JLabel("Year: ", JLabel.RIGHT);
+		jplEnter.add(yearLabel);
+		jplEnter.add(producerEditorYearField);
+		
+		producerEditorEpisodeTitleField = new JTextField(20);
+		JLabel episodeTitleLabel = new JLabel("Episode Title: ", JLabel.RIGHT);
+		jplEnter.add(episodeTitleLabel);
+		jplEnter.add(producerEditorEpisodeTitleField);
+		
+		producerEditorEpisodeNumberField = new JTextField(20);
+		JLabel episodeNumLabel = new JLabel("Episode Number: ", JLabel.RIGHT);
+		jplEnter.add(episodeNumLabel);
+		jplEnter.add(producerEditorEpisodeNumberField);
+		
+		producerEditorTypeField = new JTextField(20);
+		JLabel type = new JLabel("Venue: ", JLabel.RIGHT);
+		jplEnter.add(type);
+		jplEnter.add(producerEditorTypeField);
+		
+		producerEditorRoleField = new JTextField(20);
+		JLabel roleLabel = new JLabel("Role: ", JLabel.RIGHT);
+		jplEnter.add(roleLabel);
+		jplEnter.add(producerEditorRoleField);
+		
+		producerEditorCreditField = new JTextField(20);
+		JLabel creditLabel = new JLabel("Credit: ", JLabel.RIGHT);
+		jplEnter.add(creditLabel);
+		jplEnter.add(producerEditorCreditField);
+		
+		jplEnter.add(editProducerButton);
+		jplEnter.add(noButton);
+		
+		frame.add(jplEnter);
+		frame.setResizable(false);
+		frame.pack();
+		return frame;
+	}
+	
 }

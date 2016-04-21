@@ -1,10 +1,471 @@
 
-public class MdsDriver {
-	public static void main(String[] args){
-		InputWindowsView input = new InputWindowsView();
-		Controller c = new Controller();
-		c.setView(input);
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+public class Controller {
+	private InputWindowsView input;
+	
+	
+	public void setView(InputWindowsView view){
+		input = view;
+		
+		input.addLoadFilesActionListener(new LoadFilesListener());
+		input.addImportActionListener(new ImportFilesListener());
+		input.addSaveActionListener(new SaveFileListener());
+		input.addExportActionListener(new ExportFileListener());
+		input.addAddMovieActionListener(new AddMovieListener());
+		input.addAddSeriesActionListener(new AddSeriesListener());
+		input.addAddEpisodeActionListener(new AddEpisodeListener());
+		input.addAddActorActionListener(new AddActorListener());
+		input.addAddDirectorActionListener(new AddDirectorListener());
+		input.addAddProducerActionListener(new AddProducerListener());
+		
+		input.addEditMovieActionListener(new EditMovieListener());
+		input.addEditSeriesActionListener(new EditSeriesListener());
+		input.addEditEpisodeActionListener(new EditEpisodeListener());
+		input.addEditActorActionListener(new EditActorListener());
+		input.addEditDirectorActionListener(new EditDirectorListener());
+		input.addEditProducerActionListener(new EditProducerListener());
+		
+		input.addDeleteActionListener(new DeleteListener());
+		input.addClearActionListener(new ClearListener());
+		input.addClearAllActionListener(new ClearAllListener());
 		
 	}
-}
 	
+	
+	private class LoadFilesListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e){
+			input.filesChooser.setMultiSelectionEnabled(true);
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("OBJECT I/O FIELS", "text", "text");
+			input.filesChooser.setFileFilter(filter);
+			input.filesChooser.showOpenDialog(input.load);
+			input.filesChooser.getSelectedFile();
+			//TODO model load I/O Object files 
+
+		}
+	}
+	
+	private class SaveFileListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e){
+			input.filesChooser.showSaveDialog(null);
+			//TODO save binary files
+		}
+	}
+	
+	private class ExportFileListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e){
+			input.filesChooser.showSaveDialog(null);
+			//TODO export txt files
+			
+		}
+	}
+	
+	
+	private class ImportFilesListener implements ActionListener{
+		@Override 
+		public void actionPerformed(ActionEvent e){
+			String[] choose = {"Movie", "Series", "Episode", "Actor", "Director", "Producer"};
+			String fileType = (String)JOptionPane.showInputDialog(null, "Choose file type...", 
+					"Choose what type files you want to import", JOptionPane.QUESTION_MESSAGE, null
+					,choose, choose[0]);
+			if(fileType != null){ 
+				input.filesChooser.showOpenDialog(input);
+				//TODO  import files
+			}
+		}
+	}
+	
+	
+	
+	private class AddMovieListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			String title = input.movieTitleField.getText();
+			String year = "";
+			String ronNum = "";
+			String venue = "";
+			
+			year = input.movieYearField.getText();
+			if(input.movieYearField.getText().isEmpty()){
+				year = "????";
+				System.out.println(year);
+			}
+			ronNum = input.ronNumField.getText();
+			venue = input.venueField.getText();
+			
+			//clean the field after add into model 
+			input.movieTitleField.setText(null);
+			input.movieYearField.setText(null);
+			input.ronNumField.setText(null);
+			input.venueField.setText(null);
+			JOptionPane.showMessageDialog(null, "Add successful.");
+			
+			//TODO add into model	
+			
+		}
+	}
+	
+	private class AddSeriesListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			String title = input.seriesTitleField.getText();
+			String startYear = "";
+			String endYear = "";
+			
+			startYear = input.seriesStartYearField.getText();
+			if(input.seriesStartYearField.getText().isEmpty()){
+				startYear = "????";
+				System.out.println("Series added");//test
+			}
+			endYear = input.seriesEndYearField.getText();
+			if(input.seriesEndYearField.getText().isEmpty()){
+				endYear = "????";
+			}
+			
+			//clean the field after add into model 
+			input.seriesTitleField.setText(null);
+			input.seriesStartYearField.setText(null);
+			input.seriesEndYearField.setText(null);
+			JOptionPane.showMessageDialog(null, "Add successful.");
+			
+			//TODO add into model	
+			
+		}
+	}
+	
+	
+	
+	private class AddEpisodeListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			String title = input.episodeTitleField.getText();
+			String episodeTitle = input.episodeTitleField.getText();
+			String startYear = "";
+			String endYear = "";
+			String episodeNum = input.episodeNumField.getText();
+			
+			startYear = input.episodeStartYearField.getText();
+			if(input.episodeStartYearField.getText().isEmpty()){
+				startYear = "????";
+				System.out.println("Series added");//test
+			}
+			endYear = input.episodeEndYearField.getText();
+			if(input.episodeEndYearField.getText().isEmpty()){
+				endYear = "????";
+			}
+			
+			
+			//clean the field after add into model 
+			input.episodeTitleField.setText(null);
+			input.episodeTitleField.setText(null);
+			input.episodeStartYearField.setText(null);
+			input.episodeEndYearField.setText(null);
+			input.episodeNumField.setText(null);
+			JOptionPane.showMessageDialog(null, "Add successful.");
+			
+			//TODO add into model	
+			
+		}
+	}
+	
+	private class AddActorListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			
+			String name = input.actorNameField.getText();
+			String title = input.actorTitleField.getText();
+			String year = input.actorYearField.getText();
+			String episodeTitle = input.actorEpisodeTitleField.getText();
+			String episodeNum = input.actorEpisodeNumberField.getText();
+			String type = input.actorTitleField.getText();
+			String role = input.actorRoleField.getText();
+			String achiveFootage = input.actorArchiveFootageField.getText();
+			String credit = input.actorCreditField.getText();
+			String charName = input.actorCharNameField.getText();
+			String billingOrder = input.actorBillingOrderField.getText();
+			
+			//TODO pass paramaters into model add Actor
+		}
+		
+	}
+	
+	private class AddDirectorListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			
+			String name = input.directorNameField.getText();
+			String title = input.directorTitleField.getText();
+			String year = input.directorYearField.getText();
+			String episodeTitle = input.directorEpisodeTitleField.getText();
+			String episodeNum = input.directorEpisodeNumberField.getText();
+			String type = input.directorTitleField.getText();
+			String credit = input.directorCreditField.getText();
+			
+			//TODO pass paramaters into model add Actor
+		}
+		
+	}
+	
+
+	private class AddProducerListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			
+			String name = input.producerNameField.getText();
+			String title = input.producerTitleField.getText();
+			String year = input.producerYearField.getText();
+			String episodeTitle = input.producerEpisodeTitleField.getText();
+			String episodeNum = input.producerEpisodeNumberField.getText();
+			String type = input.producerTitleField.getText();
+			String role = input.producerRoleField.getText();
+			String credit = input.producerCreditField.getText();
+			
+			//TODO pass paramaters into model add Actor
+		}
+		
+
+		
+	}
+	
+	private class EditMovieListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			String title = input.movieEditorTitleField.getText();
+			String year = "";
+			String ronNum = "";
+			String venue = "";
+			
+			year = input.movieEditorYearField.getText();
+			if(input.movieEditorYearField.getText().isEmpty()){
+				year = "????";
+				System.out.println(year);
+			}
+			ronNum = input.ronNumEditorField.getText();
+			venue = input.venueEditorField.getText();
+			
+
+			JOptionPane.showMessageDialog(null, "Edit successful.");
+			
+			//TODO add into model	
+			
+		}
+	}
+	
+	private class EditSeriesListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			String title = input.seriesEditorTitleField.getText();
+			String startYear = "";
+			String endYear = "";
+			
+			startYear = input.seriesEditorStartYearField.getText();
+			if(input.seriesEditorStartYearField.getText().isEmpty()){
+				startYear = "????";
+				System.out.println("Series added");//test
+			}
+			endYear = input.seriesEditorEndYearField.getText();
+			if(input.seriesEditorEndYearField.getText().isEmpty()){
+				endYear = "????";
+			}
+			
+			//clean the field after add into model 
+			input.seriesEditorTitleField.setText(null);
+			input.seriesEditorStartYearField.setText(null);
+			input.seriesEditorEndYearField.setText(null);
+			JOptionPane.showMessageDialog(null, "Edit successful.");
+			
+			//TODO add into model	
+			
+		}
+	}
+	
+	
+	
+	private class EditEpisodeListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			String title = input.episodeEditorTitleField.getText();
+			String episodeTitle = input.episodeEditorTitleField.getText();
+			String startYear = "";
+			String endYear = "";
+			String episodeNum = input.episodeEditorNumField.getText();
+			
+			startYear = input.episodeEditorStartYearField.getText();
+			if(input.episodeEditorStartYearField.getText().isEmpty()){
+				startYear = "????";
+				System.out.println("Series added");//test
+			}
+			endYear = input.episodeEditorEndYearField.getText();
+			if(input.episodeEditorEndYearField.getText().isEmpty()){
+				endYear = "????";
+			}
+			
+			
+			//clean the field after add into model 
+			input.episodeTitleField.setText(null);
+			input.episodeTitleField.setText(null);
+			input.episodeStartYearField.setText(null);
+			input.episodeEndYearField.setText(null);
+			input.episodeNumField.setText(null);
+			JOptionPane.showMessageDialog(null, "Add successful.");
+			
+			//TODO add into model	
+			
+		}
+	}
+	
+	private class EditActorListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			
+			String name = input.actorEditorNameField.getText();
+			String title = input.actorEditorTitleField.getText();
+			String year = input.actorEditorYearField.getText();
+			String episodeTitle = input.actorEditorEpisodeTitleField.getText();
+			String episodeNum = input.actorEditorEpisodeNumberField.getText();
+			String type = input.actorEditorTitleField.getText();
+			String role = input.actorEditorRoleField.getText();
+			String achiveFootage = input.actorEditorArchiveFootageField.getText();
+			String credit = input.actorEditorCreditField.getText();
+			String charName = input.actorEditorCharNameField.getText();
+			String billingOrder = input.actorEditorBillingOrderField.getText();
+			
+			if(year.isEmpty()) year = "????";
+			//TODO pass paramaters into model add Actor
+		}
+		
+	}
+	
+	private class EditDirectorListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			
+			String name = input.directorEditorNameField.getText();
+			String title = input.directorEditorTitleField.getText();
+			String year = input.directorEditorYearField.getText();
+			String episodeTitle = input.directorEditorEpisodeTitleField.getText();
+			String episodeNum = input.directorEditorEpisodeNumberField.getText();
+			String type = input.directorEditorTitleField.getText();
+			String credit = input.directorEditorCreditField.getText();
+			if(year.isEmpty()) year = "????";
+			//TODO pass paramaters into model add Actor
+		}
+		
+	}
+	
+
+	private class EditProducerListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			
+			String name = input.producerEditorNameField.getText();
+			String title = input.producerEditorTitleField.getText();
+			String year = input.producerEditorYearField.getText();
+			String episodeTitle = input.producerEditorEpisodeTitleField.getText();
+			String episodeNum = input.producerEditorEpisodeNumberField.getText();
+			String type = input.producerEditorTitleField.getText();
+			String role = input.producerEditorRoleField.getText();
+			String credit = input.producerEditorCreditField.getText();
+			if(year.isEmpty()) year = "????";
+
+			//TODO pass paramaters into model add Actor
+		}
+	}
+	
+	private class DeleteListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			int removeIndex = input.objectList.getSelectedIndex();
+			if(removeIndex < 0){
+				JOptionPane.showMessageDialog(null, "You must select one of objects in "
+						+ "the left output area to delete","Selection Error", JOptionPane.ERROR_MESSAGE);
+			}
+			
+			for(int i = 0; i < input.buttonList.size(); i++){
+				if(input.buttonList.get(i).isSelected()){
+					if(i == 1){
+						//TODO remove from move list
+						break;
+					}
+					else if(i == 2){
+						//TODO remove from series list
+						break;
+					}
+					else if(i == 3){
+						//TODO remove from Episode list
+						break;
+					}
+					else if(i == 5){
+						//TODO remove from actor list
+						break;
+					}
+					else if(i == 6){
+						//TODO remove from move list
+						break;
+					}
+					else if(i == 7){
+						//TODO remove from producer list
+						break;
+					}
+				}
+			}			
+
+		}
+	}
+	
+	private class ClearListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent event){
+			int n = 0;
+			for(int i = 0; i < input.buttonList.size(); i++){
+				if(input.buttonList.get(i).isSelected()) n++;
+			}
+			if(n == 0){
+				JOptionPane.showMessageDialog(null, "You must select which type of object you want to clear", "Clear Error",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			else {
+				if(input.movieButton.isSelected()){
+					//TODO clear Movie
+				}
+				else if(input.seriesButton.isSelected()){
+					//TODO clear Series
+				}
+				else if(input.episodeButton.isSelected()){
+					//TODO clear episode
+				}
+				else if(input.actorsButton.isSelected()){
+					//TODO clear Actor
+				}
+				else if(input.directorsButton.isSelected()){
+					//TODO clear Director
+				}
+				else if(input.producersButton.isSelected()){
+					//TODO clear Producer
+				}
+			}
+		}
+	}
+	private class ClearAllListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent event){
+			//TODO clear all data
+		}
+	}
+}

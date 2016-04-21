@@ -20,7 +20,8 @@ public class MediaModel {
 	public static ArrayList<Show> episodes = new ArrayList<Show>();
 	
 	private ArrayList<ActionListener> actionListenerList;
-
+	/** database that read, load, save, edit data*/
+	public MovieDatabase database;
 	/**Takes file of movies, parses them, and add them a movie array list
 	 * 
 	 * @param file Name of File containing movies
@@ -28,7 +29,7 @@ public class MediaModel {
 	 */
 	public void readInMoviesFile(File movie) throws IOException
 	{
-		movies = MovieDatabase.readShowsIntoDB(movie, true);
+		movies = database.readShowsIntoDB(movie, true);
 	}
 	
 	/**Takes a selected movie, and searches through the movies array list for that movie
@@ -61,10 +62,12 @@ public class MediaModel {
 		if(i == -1)
 		{
 			movies.add(movie);
+			processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "movies list changed"));
 			return true;
 		}
-		else
+		else{
 			return false;
+		}
 	}
 	
 	/**
@@ -86,6 +89,7 @@ public class MediaModel {
 	{
 		movies.remove(indexOfMovie);
 		movies.add(indexOfMovie, newMovie);
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "movies list changed"));
 		return true;
 	}
 	
@@ -97,6 +101,7 @@ public class MediaModel {
 	public boolean deleteMovie(int indexOfMovie)
 	{
 		movies.remove(indexOfMovie);
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "movies list changed"));
 		return true;
 	}
 	
@@ -107,6 +112,7 @@ public class MediaModel {
 	public boolean clearMovies()
 	{
 		movies.clear();
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "movies list changed"));
 		return true;
 	}
 	
@@ -118,9 +124,10 @@ public class MediaModel {
 	 */
 	public void readInSeriesFile(File seriesFile) throws IOException
 	{
-		series = MovieDatabase.readShowsIntoDB(seriesFile, false);
-		series = MovieDatabase.getTVSeries();
-		episodes = MovieDatabase.getEpisodes();
+		series = database.readShowsIntoDB(seriesFile, false);
+		series = database.getTVSeries();
+		episodes = database.getEpisodes();
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "series list changed"));
 	}
 	
 	/**Takes a selected series, and searches through the series array list for that series
@@ -152,6 +159,7 @@ public class MediaModel {
 		int i = searchSeries(seriesKey);
 		if(i == -1)
 		{
+			processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "series list changed"));
 			series.add(seriesKey);
 			return true;
 		}
@@ -178,6 +186,7 @@ public class MediaModel {
 	{
 		series.remove(indexOfSeries);
 		series.add(indexOfSeries, newSeries);
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "series list changed"));
 		return true;
 	}
 	
@@ -189,6 +198,7 @@ public class MediaModel {
 	public boolean deleteSeries(int indexOfSeries)
 	{
 		series.remove(indexOfSeries);
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "series list changed"));
 		return true;
 	}
 	
@@ -199,6 +209,7 @@ public class MediaModel {
 	public boolean clearSeries()
 	{
 		series.clear();
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "series list changed"));
 		return true;
 	}
 	
@@ -232,6 +243,7 @@ public class MediaModel {
 		if(i == -1)
 		{
 			episodes.add(episode);
+			processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "series list changed"));
 			return true;
 		}
 		else
@@ -257,6 +269,7 @@ public class MediaModel {
 	{
 		episodes.remove(indexOfEpisode);
 		episodes.add(indexOfEpisode, newEpisode);
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "series list changed"));
 		return true;
 	}
 	
@@ -268,6 +281,7 @@ public class MediaModel {
 	public boolean deleteEpisode(int indexOfEpisode)
 	{
 		episodes.remove(indexOfEpisode);
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "series list changed"));
 		return true;
 	}
 	
@@ -278,6 +292,7 @@ public class MediaModel {
 	public boolean clearEpisodes()
 	{
 		episodes.clear();
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "series list changed"));
 		return true;
 	}
 	/**Takes file of actors, parses them, and add them a actors array list
@@ -287,6 +302,7 @@ public class MediaModel {
 	 */
 	public void readInActorFile(File actor) throws IOException{
 		actors = Creator.fillActors(actor);
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "actors list changed"));
 	}
 	
 	/**Takes a selected actor, and searches through the actor array list for that actor
@@ -319,6 +335,7 @@ public class MediaModel {
 		if(i == -1)
 		{
 			actors.add(actor);
+			processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "actors list changed"));
 			return true;
 		}
 		else
@@ -344,6 +361,7 @@ public class MediaModel {
 	{
 		actors.remove(indexOfActor);
 		actors.add(indexOfActor, newActor);
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "actors list changed"));
 		return true;
 	}
 	
@@ -355,6 +373,7 @@ public class MediaModel {
 	public boolean deleteActor(int indexOfActor)
 	{
 		actors.remove(indexOfActor);
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "actors list changed"));
 		return true;
 	}
 	
@@ -365,6 +384,7 @@ public class MediaModel {
 	public boolean clearActors()
 	{
 		actors.clear();
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "actors list changed"));
 		return true;
 	}
 	
@@ -375,6 +395,7 @@ public class MediaModel {
 	 */
 	public void readInDirectorFile(File director) throws IOException{
 		directors = Creator.fillDirectors(director);
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "director list changed"));
 	}
 	
 	/**Takes a selected director, and searches through the director array list for that director
@@ -407,6 +428,7 @@ public class MediaModel {
 		if(i == -1)
 		{
 			directors.add(director);
+			processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "director list changed"));
 			return true;
 		}
 		else
@@ -432,6 +454,7 @@ public class MediaModel {
 	{
 		directors.remove(indexOfDirector);
 		directors.add(indexOfDirector, newDirector);
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "director list changed"));
 		return true;
 	}
 	
@@ -443,6 +466,7 @@ public class MediaModel {
 	public boolean deleteDirector(int indexOfDirector)
 	{
 		directors.remove(indexOfDirector);
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "director list changed"));
 		return true;
 	}
 	
@@ -453,6 +477,7 @@ public class MediaModel {
 	public boolean clearDirectors()
 	{
 		directors.clear();
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "director list changed"));
 		return true;
 	}
 	
@@ -463,6 +488,7 @@ public class MediaModel {
 	 */
 	public void readInProducerFile(File producer) throws IOException{
 		producers = Creator.fillProducers(producer);
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "producer list changed"));
 	}
 	
 	/**Takes a selected producer, and searches through the actor array list for that producer
@@ -495,6 +521,7 @@ public class MediaModel {
 		if(i == -1)
 		{
 			producers.add(producer);
+			processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "producer list changed"));
 			return true;
 		}
 		else
@@ -520,6 +547,7 @@ public class MediaModel {
 	{
 		producers.remove(indexOfProducer);
 		producers.add(indexOfProducer, newProducer);
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "producer list changed"));
 		return true;
 	}
 	
@@ -531,6 +559,7 @@ public class MediaModel {
 	public boolean deleteProducer(int indexOfProducer)
 	{
 		producers.remove(indexOfProducer);
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "producer list changed"));
 		return true;
 	}
 	
@@ -541,6 +570,7 @@ public class MediaModel {
 	public boolean clearProducers()
 	{
 		producers.clear();
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "producer list changed"));
 		return true;
 	}
 	
@@ -555,14 +585,41 @@ public class MediaModel {
 		actors.clear();
 		directors.clear();
 		producers.clear();
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "clear all"));
 		return true;
 	}
-	public void addActionListener(ActionListener I) {
+	
+	/**
+	 * Register an action event listener.
+	 */
+	public synchronized void addActionListener(ActionListener l) {
+		if (actionListenerList == null)
+			actionListenerList = new ArrayList<ActionListener>();
+		actionListenerList.add(l);
 	}
 	
-	public void removeActionListener(ActionListener I) {
+	/**
+	 * Remove an action event listener.
+	 */
+	public synchronized void removeActionListener(ActionListener l) {
+		if (actionListenerList != null && actionListenerList.contains(l))
+			actionListenerList.remove(l);
 	}
 	
-	public void processEvent(ActionEvent e) {
+	/**
+	 * Fire event.
+	 */
+	private void processEvent(ActionEvent e) {
+		ArrayList<ActionListener> list;
+		
+		synchronized (this) {
+			if (actionListenerList == null) return;
+			list = (ArrayList<ActionListener>)actionListenerList.clone();
+		}
+		
+		for (int i = 0; i < list.size(); i++) {
+			ActionListener listener = list.get(i);
+			listener.actionPerformed(e);
+		}
 	}
 }

@@ -1,33 +1,182 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MediaModel {
+	/** List that stores information about actors  */
+	public static ArrayList<Creator> actors = new ArrayList<Creator>();
+	/** List that stores information about directors */
+	public static ArrayList<Creator> directors = new ArrayList<Creator>();
+	/** List that stores information about producers */
+	public static ArrayList<Creator> producers = new ArrayList<Creator>();
 	private Show showOne;
 	private Creator creatorOne;
 	private ArrayList<ActionListener> actionListenerList;
 
 
-	public Creator getCreator() {
-		return null;
+	public void readInActorFile(File actor) throws IOException{
+		actors = Creator.fillActors(actor);
 	}
-	public Show getShow() {
-		return null;
+	
+	public int searchActor(Creator actor)
+	{
+		for(int i = 0; i < actors.size(); i ++)
+		{
+			if(actor.equals(actors.get(i)))
+			{
+				return i;
+			}
+		}
+		return -1;
 	}
-	public void setShow(){
-		
+	
+	public boolean addActor(Creator actor)
+	{
+		int i = searchActor(actor);
+		if(i == -1)
+		{
+			actors.add(actor);
+			return true;
+		}
+		else
+			return false;
 	}
-	public void setCreator(){
-		
+	
+	public ArrayList<Creator> getActor()
+	{
+		return actors;
 	}
-
+	
+	public boolean editActor(int indexOfActor, Creator newActor)
+	{
+		actors.remove(indexOfActor);
+		actors.add(indexOfActor, newActor);
+		return true;
+	}
+	
+	public boolean deleteActor(int indexOfActor)
+	{
+		actors.remove(indexOfActor);
+		return true;
+	}
+	
+	public boolean clearActors()
+	{
+		actors.clear();
+		return true;
+	}
+	
+	public void readInDirectorFile(File director) throws IOException{
+		directors = Creator.fillDirectors(director);
+	}
+	
+	public int searchDirector(Creator director)
+	{
+		for(int i = 0; i < directors.size(); i ++)
+		{
+			if(director.equals(directors.get(i)))
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public boolean addDirector(Creator director)
+	{
+		int i = searchDirector(director);
+		if(i == -1)
+		{
+			directors.add(director);
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	public ArrayList<Creator> getDirector()
+	{
+		return directors;
+	}
+	
+	public boolean editDirector(int indexOfDirector, Creator newDirector)
+	{
+		directors.remove(indexOfDirector);
+		directors.add(indexOfDirector, newDirector);
+		return true;
+	}
+	
+	public boolean deleteDirector(int indexOfDirector)
+	{
+		directors.remove(indexOfDirector);
+		return true;
+	}
+	
+	public boolean clearDirectors()
+	{
+		directors.clear();
+		return true;
+	}
+	
+	public void readInProducerFile(File producer) throws IOException{
+		producers = Creator.fillProducers(producer);
+	}
+	
+	public int searchProducer(Creator producer)
+	{
+		for(int i = 0; i < producers.size(); i ++)
+		{
+			if(producer.equals(producers.get(i)))
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public boolean addProducer(Creator producer)
+	{
+		int i = searchProducer(producer);
+		if(i == -1)
+		{
+			producers.add(producer);
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	public ArrayList<Creator> getProducer()
+	{
+		return producers;
+	}
+	
+	public boolean editProducer(int indexOfProducer, Creator newProducer)
+	{
+		producers.remove(indexOfProducer);
+		producers.add(indexOfProducer, newProducer);
+		return true;
+	}
+	
+	public boolean deleteProducer(int indexOfProducer)
+	{
+		producers.remove(indexOfProducer);
+		return true;
+	}
+	
+	public boolean clearProducers()
+	{
+		producers.clear();
+		return true;
+	}
 	public void addActionListener(ActionListener I) {
-
 	}
+	
 	public void removeActionListener(ActionListener I) {
 	}
-	public void processEvent(ActionEvent e){
-		
+	
+	public void processEvent(ActionEvent e) {
 	}
-
 }

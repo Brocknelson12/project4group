@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -5,18 +6,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 	
-public class MovieDatabase{
+ public class MovieDatabase{
 	/** SerialID that lets us implement Serializable */
 	private static final long serialVersionUID = 1L;
-	
 	/**List containing all the movies and TV shows*/
 	private ArrayList<Show> mDb = new ArrayList<Show>();
-	
-	private ArrayList<Show> tVseries = new ArrayList<Show>();
-	
-	private ArrayList<Show> movies = new ArrayList<Show>();
-	
-	private ArrayList<Show> episodes = new ArrayList<Show>();
+	/** List that stores information about TV series */
+	private static ArrayList<Show> tVseries = new ArrayList<Show>();
+	/** List that stores information about movies */
+	private static ArrayList<Show> movies = new ArrayList<Show>();
+	/** List that stores information about episodes */
+	private static ArrayList<Show> episodes = new ArrayList<Show>();
 	/**LinkedHashMap containing all the actors*/
 	private LinkedHashMap<String, ArrayList<Creator>> actors = new LinkedHashMap<String, ArrayList<Creator>>();
 	/**LinkedHashMap containing all the directors*/
@@ -41,8 +41,10 @@ public class MovieDatabase{
 	 */
 	public MovieDatabase(String moviesFile, String TVFile) {
 		try {
-			mDb.addAll(readShowsIntoDB(moviesFile, true));
-			mDb.addAll(readShowsIntoDB(TVFile, false));
+			File movie = new File(moviesFile);
+			File tVFile = new File(TVFile);
+			mDb.addAll(readShowsIntoDB(movie, true));
+			mDb.addAll(readShowsIntoDB(tVFile, false));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -54,7 +56,7 @@ public class MovieDatabase{
 	 * @param isMovie true if file contains movies, false if file containing TV
 	 * @throws IOException 
 	 */
-	private ArrayList<Show> readShowsIntoDB(String file, boolean isMovie) throws IOException {
+	 public static ArrayList<Show> readShowsIntoDB(File file, boolean isMovie) throws IOException {
 		FileReader fr = new FileReader(file);
 		BufferedReader br = new BufferedReader(fr);
 	
@@ -146,7 +148,7 @@ public class MovieDatabase{
 	 * @param Information about movie
 	 * @return Returns Movie created based off information in the line
 	 */
-	private Movie parseMovie(String line) {
+	private static Movie parseMovie(String line) {
 		String name = "";
 		String year = "";
 		ArrayList<String> extraInfo = new ArrayList<String>();
@@ -202,7 +204,7 @@ public class MovieDatabase{
 	 * @param line String to be parsed
 	 * @return TVSeries based on line
 	 */
-	private TVSeries parseTV(String line) {
+	private static TVSeries parseTV(String line) {
 		String name = "";
 		String year = "";
 		String endYear = "";
@@ -223,7 +225,7 @@ public class MovieDatabase{
 	 * @param series Series of which this episode is a part
 	 * @return Episode based on line
 	 */
-	private Episode parseEpisode(String line, TVSeries series) {
+	private static Episode parseEpisode(String line, TVSeries series) {
 		String name = "";
 		String year = "";
 		String episodeNumber = "";
@@ -281,88 +283,28 @@ public class MovieDatabase{
 	{
 		return producers;
 	}
-	public int searchMovie(Show searchedMovie) {
-
-		for (int i = 0; i < movies.size() - 1; ++i) {
-			while (searchedMovie.equals(movies.get(i))) {
-				return i;
-			}
-		}
-		return -1;
-	}
-	public boolean addMovie(Show movie) {
-		int i = searchMovie(movie);
-		if (i == -1) {
-			movies.add(movie);
-			return true;
-		} else {
-			return false;
-		}
-	}
-	public ArrayList<Show> getMovies()
+	
+	/**
+	 * @return an array list containing movies
+	 */
+	public static ArrayList<Show> getMovies()
 	{
 		return movies;
 	}
-	public boolean editMovie(int indexOfMovie, Creator newMovie)
-	{
-		movies.remove(indexOfMovie);
-		movies.add(indexOfMovie, newMovie);
-		return true;
-	}
-	public int searchTVSeries(Show searchedTVSeries) {
-
-		for (int i = 0; i < tVseries.size() - 1; ++i) {
-			while (searchedTVSeries.equals(tVseries.get(i))) {
-				return i;
-			}
-		}
-		return -1;
-	}
-	public boolean addTVSeries(Show TVSeries) {
-		int i = searchTVSeries(TVSeries);
-		if (i == -1) {
-			tVseries.add(TVSeries);
-			return true;
-		} else {
-			return false;
-		}
-	}
-	public ArrayList<Show> getTVSeries()
+	
+	/**
+	 * @return an array list containing TV series
+	 */
+	public static ArrayList<Show> getTVSeries()
 	{
 		return tVseries;
 	}
-	public boolean editTVSeries(int indexOfTVSeries, Show newTVSeries)
-	{
-		tVseries.remove(indexOfTVSeries);
-		tVseries.add(indexOfTVSeries, newTVSeries);
-		return true;
-	}
-	public int searchEpisode(Show searchedEpisode) {
-
-		for (int i = 0; i < episodes.size() - 1; ++i) {
-			while (searchedEpisode.equals(episodes.get(i))) {
-				return i;
-			}
-		}
-		return -1;
-	}
-	public boolean addEpisode(Show episode) {
-		int i = searchEpisode(episode);
-		if (i == -1) {
-			episodes.add(episode);
-			return true;
-		} else {
-			return false;
-		}
-	}
-	public ArrayList<Show> getEpisodes()
+	
+	/**
+	 * @return an array list containing episodes
+	 */
+	public static ArrayList<Show> getEpisodes()
 	{
 		return episodes;
 	}
-	public boolean editEpisode(int indexOfEpisode, Creator newEpisode)
-	{
-		episodes.remove(indexOfEpisode);
-		episodes.add(indexOfEpisode, newEpisode);
-		return true;
-	}
-	}
+}

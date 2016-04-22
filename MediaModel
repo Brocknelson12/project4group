@@ -692,7 +692,7 @@ public class MediaModel {
 	 * @param String fileName: The string containing the fileName of the file to be read from
 	 * @return Creator: the new Creator read from the file
 	 */
-	public static Creator readFromFile(String fileName) throws IOException, ClassNotFoundException{
+	public static Creator readFromFileCreators(String fileName) throws IOException, ClassNotFoundException{
 		FileInputStream fileInputStream = new FileInputStream(fileName); //opens file
 		ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 		Creator creator = (Creator) objectInputStream.readObject(); //creates an object of type Creator
@@ -712,7 +712,7 @@ public class MediaModel {
 	 * @param String fileName: The string containing the fileName of the file to be read from
 	 * @return Show: the new Show read from the file
 	 */
-	public static Show readFromFile(String fileName) throws IOException, ClassNotFoundException{
+	public static Show readFromFileShows(String fileName) throws IOException, ClassNotFoundException{
 		FileInputStream fileInputStream = new FileInputStream(fileName); //opens file
 		ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 		Show show = (Show) objectInputStream.readObject(); //creates an object of type Show

@@ -30,6 +30,7 @@ public class MediaModel {
 	public void readInMoviesFile(File movie) throws IOException
 	{
 		movies = database.readShowsIntoDB(movie, true);
+		processEvent(new ActionEvent (this, ActionEvent.ACTION_PERFORMED, "movies list changed"));
 	}
 	
 	/**Takes a selected movie, and searches through the movies array list for that movie

@@ -719,4 +719,34 @@ public class MediaModel {
 		objectInputStream.close(); //closes InputStream
 		return show; // returns creator
 	}// end readFromFile
+	
+	public static void writeToTextFileShows(String fileName) throws IOException{
+		FileWriter write = new FileWriter(fileName);
+		for(int i = 0; i < movies.size(); i++){
+		    allShows.add(movies.get(i));
+		}
+		for(int i = 0; i < series.size(); i++){
+			allShows.add(series.get(i));
+		}
+		for(int i = 0; i < episodes.size(); i++){
+			allShows.add(episodes.get(i));
+		}
+		PrintWriter printline = new PrintWriter(write);
+		printline.printf(fileName, allShows);	
+	}
+	
+	public static void writeToTextFileCreators(String fileName) throws IOException{
+		FileWriter write = new FileWriter(fileName);
+		for(int i = 0; i < actors.size(); i++){
+		    allCreators.add(actors.get(i));
+		}
+		for(int i = 0; i < directors.size(); i++){
+			allCreators.add(directors.get(i));
+		}
+		for(int i = 0; i < producers.size(); i++){
+			allCreators.add(producers.get(i));
+		}
+		PrintWriter printline = new PrintWriter(write);
+		printline.printf(fileName, allCreators);	
+	}
 }

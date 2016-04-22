@@ -679,4 +679,44 @@ public class MediaModel {
 		objectOutputStream.writeObject(allShows); // writes Objects in DB to file
 		objectOutputStream.close(); // closes OutputStream
 	}//end writeToFile
+	
+	/**
+	 * Opens a file specified by the user and creates a Creator object.
+	 * <P>
+	*Algorithm:<br>
+	* 1. Opens a file specified by the user. <br>
+	* 2. Create a object of type Creator <br>
+	* 3. close InputStream. <br>
+	* 4. return Creator. <br>
+	* </P>
+	 * @param String fileName: The string containing the fileName of the file to be read from
+	 * @return Creator: the new Creator read from the file
+	 */
+	public static Creator readFromFile(String fileName) throws IOException, ClassNotFoundException{
+		FileInputStream fileInputStream = new FileInputStream(fileName); //opens file
+		ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+		Creator creator = (Creator) objectInputStream.readObject(); //creates an object of type Creator
+		objectInputStream.close(); //closes InputStream
+		return creator; // returns creator
+	}// end readFromFile
+	
+	/**
+	 * Opens a file specified by the user and creates a Show object.
+	 * <P>
+	*Algorithm:<br>
+	* 1. Opens a file specified by the user. <br>
+	* 2. Create a object of type Show <br>
+	* 3. close InputStream. <br>
+	* 4. return Show. <br>
+	* </P>
+	 * @param String fileName: The string containing the fileName of the file to be read from
+	 * @return Show: the new Show read from the file
+	 */
+	public static Show readFromFile(String fileName) throws IOException, ClassNotFoundException{
+		FileInputStream fileInputStream = new FileInputStream(fileName); //opens file
+		ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+		Show show = (Show) objectInputStream.readObject(); //creates an object of type Show
+		objectInputStream.close(); //closes InputStream
+		return show; // returns creator
+	}// end readFromFile
 }

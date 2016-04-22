@@ -13,11 +13,15 @@ public class MediaModel {
 	/** List that stores information about producers */
 	public static ArrayList<Creator> producers = new ArrayList<Creator>();
 	/** List that stores information about movies */
+	public static ArrayList<Creator> allCreators = new ArrayList<Creator>();
+	/** List that stores information about movies */
 	public static ArrayList<Show> movies = new ArrayList<Show>();
 	/** List that stores information about series */
 	public static ArrayList<Show> series = new ArrayList<Show>();
 	/** List that stores information about episodes */
 	public static ArrayList<Show> episodes = new ArrayList<Show>();
+	/** List that stores information about shows */
+	public static ArrayList<Show> allShows = new ArrayList<Show>();
 	
 	private ArrayList<ActionListener> actionListenerList;
 	/** database that read, load, save, edit data*/

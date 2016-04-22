@@ -15,31 +15,45 @@ public class Movie extends Show implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	/**List to store any extra info about the movie*/
-	private ArrayList<String> extraInfo = new ArrayList<String>();
 	
+	private String name;
+	private String year;
+	private String roman;
+	private String venue;
 	/**Constructor for movie
 	 * 
 	 * @param name Name of movie
 	 * @param year Year movie was released
 	 * @param extraInfo Extra info about the movie
 	 */
-	public Movie(String name, String year, ArrayList<String> extraInfo) {
+	public Movie(String name,String year, String roman, String venue) {
 		super(name, year, year);
-		this.extraInfo = extraInfo;
+		this.name = name;
+		this.year = year;
+		this.roman = roman;
+		this.venue = venue;
+	}
+	
+	public Movie(String name,String year, String venue) {
+		super(name, year, year);
+		this.name = name;
+		this.year = year;
+		this.venue = venue;
 	}
 
 	/**Return string version of this movie
 	@Override
 	*/
-	public String toString() {
-		if (extraInfo.isEmpty()) {
-			return "MOVIE: " + getName() + "(" + getYear() + ")";
+	public String isEmpty(String roman){
+		if(roman.isEmpty()){
+			return "" ;
 		}
-		String extraInfoString = "";
-		for (int i = 0; i < extraInfo.size(); i++) {
-			extraInfoString += extraInfo.get(i) + " ";
+		else{
+			return "/" + roman;
 		}
-		extraInfoString.trim();
-		return "MOVIE (" + extraInfoString + "):" + getName() + "(" + getYear() + ")";
+	}
+	public String toString(){
+		
+return name + " " + "(" + year + ")" + isEmpty(roman) + "	" + venue; 
 	}
 }

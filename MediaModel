@@ -623,4 +623,56 @@ public class MediaModel {
 			listener.actionPerformed(e);
 		}
 	}
+	
+	/**
+	 * Opens a file specified by the user and outputs the creator array lists.
+	 * <P>
+	*Algorithm:<br>
+	* 1. Opens a file specified by the user. <br>
+	* 2. Puts the data of creator array lists into file. <br>
+	* 3. Closes the file. <br>
+	* </P>
+	 * @param String fileName: The name of the file the media data base is being written to
+	*/
+	public static void writeToFileCreators(String fileName) throws IOException{
+		FileOutputStream fileOutputStream = new FileOutputStream(fileName); //opens file
+		ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+		for(int i = 0; i < actors.size(); i++){
+		    allCreators.add(actors.get(i));
+		}
+		for(int i = 0; i < directors.size(); i++){
+			allCreators.add(directors.get(i));
+		}
+		for(int i = 0; i < producers.size(); i++){
+			allCreators.add(producers.get(i));
+		}
+		objectOutputStream.writeObject(allCreators); // writes Objects in DB to file
+		objectOutputStream.close(); // closes OutputStream
+	}//end writeToFile
+	
+	/**
+	 * Opens a file specified by the user and outputs the shows array lists.
+	 * <P>
+	*Algorithm:<br>
+	* 1. Opens a file specified by the user. <br>
+	* 2. Puts the data of the show array lists into file. <br>
+	* 3. Closes the file. <br>
+	* </P>
+	 * @param String fileName: The name of the file the media data base is being written to.
+	*/
+	public static void writeToFileShows(String fileName) throws IOException{
+		FileOutputStream fileOutputStream = new FileOutputStream(fileName); //opens file
+		ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+		for(int i = 0; i < movies.size(); i++){
+		    allShows.add(movies.get(i));
+		}
+		for(int i = 0; i < series.size(); i++){
+			allShows.add(series.get(i));
+		}
+		for(int i = 0; i < episodes.size(); i++){
+			allShows.add(episodes.get(i));
+		}
+		objectOutputStream.writeObject(allShows); // writes Objects in DB to file
+		objectOutputStream.close(); // closes OutputStream
+	}//end writeToFile
 }

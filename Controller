@@ -2,14 +2,20 @@
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Controller {
 	private InputWindowsView input;
+	private MediaModel model;
 	
-	
+	public Controller(){
+	// intentionally blank
+	}
 	public void setView(InputWindowsView view){
 		input = view;
 		
@@ -34,19 +40,53 @@ public class Controller {
 		input.addDeleteActionListener(new DeleteListener());
 		input.addClearActionListener(new ClearListener());
 		input.addClearAllActionListener(new ClearAllListener());
-		
 	}
 	
+	public void setModel(MediaModel model){
+		this.model = model;
+	}
+	public MediaModel getModel(){
+		return model;
+	}
 	
 	private class LoadFilesListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e){
-			input.filesChooser.setMultiSelectionEnabled(true);
-			FileNameExtensionFilter filter = new FileNameExtensionFilter("OBJECT I/O FIELS", "text", "text");
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("OBJECT I/O FIELS", "txt", "text");
 			input.filesChooser.setFileFilter(filter);
 			input.filesChooser.showOpenDialog(input.load);
 			input.filesChooser.getSelectedFile();
-			//TODO model load I/O Object files 
+			
+			String[] choose = {"Media","Makers"};
+			String fileType = (String)JOptionPane.showInputDialog(null, "Choose file type...", 
+					"Choose what type files you want to save", JOptionPane.QUESTION_MESSAGE, null
+					,choose, choose[0]);
+			
+			int fileVal = input.filesChooser.showOpenDialog(null);
+			if(fileVal == JFileChooser.APPROVE_OPTION){
+				File file = input.filesChooser.getSelectedFile();
+				try {
+					if(fileType.equals("Media")){
+						model.readFromFileShows(file);
+					}
+					else if(fileType.equals("Makers")){
+						model.readFromFileCreators(file);
+					}
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			
+			
+			input.edit.setEnabled(true);
+			input.clear.setEnabled(true);
+			input.clearAll.setEnabled(true);
+			input.delete.setEnabled(true);
+			
 
 		}
 	}
@@ -54,8 +94,32 @@ public class Controller {
 	private class SaveFileListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e){
-			input.filesChooser.showSaveDialog(null);
-			//TODO save binary files
+			String[] choose = {"Media","Makers"};
+			String fileType = (String)JOptionPane.showInputDialog(null, "Choose file type...", 
+					"Choose what type files you want to save", JOptionPane.QUESTION_MESSAGE, null
+					,choose, choose[0]);
+			
+			int fileVal = input.filesChooser.showSaveDialog(null);
+			if(fileVal == JFileChooser.APPROVE_OPTION){
+				File saveF = input.filesChooser.getSelectedFile();
+				if (fileType.equals("Media")){
+					try {
+						model.writeToFileShows(saveF);
+					} catch (IOException e1) {
+						JOptionPane.showMessageDialog(null, "Cannot Save","Save Error", JOptionPane.ERROR_MESSAGE);
+						e1.printStackTrace();
+					}
+				}
+				else if(fileType.equals("Makers")){
+					try {
+						model.writeToFileCreators(saveF);
+					} catch (IOException e1) {
+						JOptionPane.showMessageDialog(null, "Cannot Save","Save Error", JOptionPane.ERROR_MESSAGE);
+						e1.printStackTrace();
+					}
+				}
+			}
+			
 		}
 	}
 	
@@ -72,13 +136,43 @@ public class Controller {
 	private class ImportFilesListener implements ActionListener{
 		@Override 
 		public void actionPerformed(ActionEvent e){
+			File file;
 			String[] choose = {"Movie", "Series", "Episode", "Actor", "Director", "Producer"};
 			String fileType = (String)JOptionPane.showInputDialog(null, "Choose file type...", 
 					"Choose what type files you want to import", JOptionPane.QUESTION_MESSAGE, null
 					,choose, choose[0]);
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("Text File(.txt)", "text", "txt");
+			input.filesChooser.setFileFilter(filter);
 			if(fileType != null){ 
-				input.filesChooser.showOpenDialog(input);
-				//TODO  import files
+				
+				int fileChooserVal = input.filesChooser.showOpenDialog(null);
+					if(fileChooserVal == JFileChooser.APPROVE_OPTION){
+						file = input.filesChooser.getSelectedFile();
+						try {
+							if(fileType.equals(choose[0])){	
+								model.readInMoviesFile(file);
+							}
+							else if(fileType.equals(choose[1]) || fileType.equals(choose[2])){
+								model.readInSeriesFile(file);
+							}
+							else if(fileType.equals(choose[3])){
+								model.readInActorFile(file);
+							}
+							else if(fileType.equals(choose[4])){
+								model.readInDirectorFile(file);
+							}
+							else if(fileType.equals(choose[5])){
+								model.readInProducerFile(file);
+							}
+						} catch (Throwable e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						input.edit.setEnabled(true);
+						input.clear.setEnabled(true);
+						input.clearAll.setEnabled(true);
+						input.delete.setEnabled(true);
+					}
 			}
 		}
 	}
@@ -102,12 +196,15 @@ public class Controller {
 			venue = input.venueField.getText();
 			
 			//clean the field after add into model 
-			input.movieTitleField.setText(null);
-			input.movieYearField.setText(null);
-			input.ronNumField.setText(null);
-			input.venueField.setText(null);
-			JOptionPane.showMessageDialog(null, "Add successful.");
-			
+			boolean isWork;
+			isWork = model.addMovie(new Movie(title, year, ronNum, venue));
+			if(isWork){
+				JOptionPane.showMessageDialog(null, "Add successful.");
+				input.edit.setEnabled(true);
+				input.clear.setEnabled(true);
+				input.clearAll.setEnabled(true);
+				input.delete.setEnabled(true);
+			}
 			//TODO add into model	
 			
 		}
@@ -123,21 +220,24 @@ public class Controller {
 			startYear = input.seriesStartYearField.getText();
 			if(input.seriesStartYearField.getText().isEmpty()){
 				startYear = "????";
-				System.out.println("Series added");//test
 			}
 			endYear = input.seriesEndYearField.getText();
 			if(input.seriesEndYearField.getText().isEmpty()){
 				endYear = "????";
 			}
 			
-			//clean the field after add into model 
-			input.seriesTitleField.setText(null);
-			input.seriesStartYearField.setText(null);
-			input.seriesEndYearField.setText(null);
-			JOptionPane.showMessageDialog(null, "Add successful.");
 			
 			//TODO add into model	
 			
+			boolean isWork;
+			isWork = model.addSeries(new TVSeries(title, startYear, endYear));
+			if(isWork){
+				JOptionPane.showMessageDialog(null, "Add successful.");
+				input.edit.setEnabled(true);
+				input.clear.setEnabled(true);
+				input.clearAll.setEnabled(true);
+				input.delete.setEnabled(true);
+			}
 		}
 	}
 	
@@ -147,7 +247,7 @@ public class Controller {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			String title = input.episodeTitleField.getText();
-			String episodeTitle = input.episodeTitleField.getText();
+			String	seriesTitle = input.episodeSeriesTitleField.getText();
 			String startYear = "";
 			String endYear = "";
 			String episodeNum = input.episodeNumField.getText();
@@ -163,16 +263,15 @@ public class Controller {
 			}
 			
 			
-			//clean the field after add into model 
-			input.episodeTitleField.setText(null);
-			input.episodeTitleField.setText(null);
-			input.episodeStartYearField.setText(null);
-			input.episodeEndYearField.setText(null);
-			input.episodeNumField.setText(null);
-			JOptionPane.showMessageDialog(null, "Add successful.");
-			
-			//TODO add into model	
-			
+			boolean isWork;
+			isWork = model.addEpisode(new Episode(title, endYear, episodeNum, new TVSeries(seriesTitle, startYear,  endYear)));
+			if(isWork){
+				JOptionPane.showMessageDialog(null, "Add successful.");
+				input.edit.setEnabled(true);
+				input.clear.setEnabled(true);
+				input.clearAll.setEnabled(true);
+				input.delete.setEnabled(true);
+			}
 		}
 	}
 	
@@ -194,6 +293,17 @@ public class Controller {
 			String billingOrder = input.actorBillingOrderField.getText();
 			
 			//TODO pass paramaters into model add Actor
+			boolean isWork;
+			isWork = model.addActor(new Creator(name, title, year, episodeTitle, episodeNum, 
+					type, role, achiveFootage, credit, charName, billingOrder));
+			
+			if(isWork){
+				JOptionPane.showMessageDialog(null, "Add successful.");
+				input.edit.setEnabled(true);
+				input.clear.setEnabled(true);
+				input.clearAll.setEnabled(true);
+				input.delete.setEnabled(true);
+			}
 		}
 		
 	}
@@ -212,6 +322,17 @@ public class Controller {
 			String credit = input.directorCreditField.getText();
 			
 			//TODO pass paramaters into model add Actor
+			boolean isWork;
+			isWork = model.addDirector(new Creator(name, title, year, episodeTitle, episodeNum, 
+					type, credit));
+			
+			if(isWork){
+				JOptionPane.showMessageDialog(null, "Add successful.");
+				input.edit.setEnabled(true);
+				input.clear.setEnabled(true);
+				input.clearAll.setEnabled(true);
+				input.delete.setEnabled(true);
+			}
 		}
 		
 	}
@@ -231,7 +352,17 @@ public class Controller {
 			String role = input.producerRoleField.getText();
 			String credit = input.producerCreditField.getText();
 			
-			//TODO pass paramaters into model add Actor
+			boolean isWork;
+			isWork = model.addActor(new Creator(name, title, year, episodeTitle, episodeNum, 
+					type, role, credit));
+			
+			if(isWork){
+				JOptionPane.showMessageDialog(null, "Add successful.");
+				input.edit.setEnabled(true);
+				input.clear.setEnabled(true);
+				input.clearAll.setEnabled(true);
+				input.delete.setEnabled(true);
+			}
 		}
 		
 
@@ -253,9 +384,8 @@ public class Controller {
 			}
 			ronNum = input.ronNumEditorField.getText();
 			venue = input.venueEditorField.getText();
-			
-
-			JOptionPane.showMessageDialog(null, "Edit successful.");
+						
+			model.editMovie(input.movieChangedIndex, new Movie(title, year, ronNum, venue));
 			
 			//TODO add into model	
 			
@@ -279,13 +409,8 @@ public class Controller {
 				endYear = "????";
 			}
 			
-			//clean the field after add into model 
-			input.seriesEditorTitleField.setText(null);
-			input.seriesEditorStartYearField.setText(null);
-			input.seriesEditorEndYearField.setText(null);
-			JOptionPane.showMessageDialog(null, "Edit successful.");
 			
-			//TODO add into model	
+			model.editSeries(input.seriesChangedIndex, new TVSeries(title, startYear, endYear));
 			
 		}
 	}
@@ -296,7 +421,7 @@ public class Controller {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			String title = input.episodeEditorTitleField.getText();
-			String episodeTitle = input.episodeEditorTitleField.getText();
+			String episodeSeriesTitle = input.episodeEditorSeriesTitleField.getText();
 			String startYear = "";
 			String endYear = "";
 			String episodeNum = input.episodeEditorNumField.getText();
@@ -310,18 +435,7 @@ public class Controller {
 			if(input.episodeEditorEndYearField.getText().isEmpty()){
 				endYear = "????";
 			}
-			
-			
-			//clean the field after add into model 
-			input.episodeTitleField.setText(null);
-			input.episodeTitleField.setText(null);
-			input.episodeStartYearField.setText(null);
-			input.episodeEndYearField.setText(null);
-			input.episodeNumField.setText(null);
-			JOptionPane.showMessageDialog(null, "Add successful.");
-			
-			//TODO add into model	
-			
+			model.editEpisode(input.episodeChangedIndex, new Episode(title, endYear, episodeNum, new TVSeries(episodeSeriesTitle, startYear,  endYear)));
 		}
 	}
 	
@@ -343,8 +457,9 @@ public class Controller {
 			String billingOrder = input.actorEditorBillingOrderField.getText();
 			
 			if(year.isEmpty()) year = "????";
-			//TODO pass paramaters into model add Actor
-		}
+			 model.editActor(input. actorChangedIndex, new Creator(name, title, year, episodeTitle, episodeNum, 
+						type, role, achiveFootage, credit, charName, billingOrder));
+						}
 		
 	}
 	
@@ -361,8 +476,9 @@ public class Controller {
 			String type = input.directorEditorTitleField.getText();
 			String credit = input.directorEditorCreditField.getText();
 			if(year.isEmpty()) year = "????";
-			//TODO pass paramaters into model add Actor
-		}
+			 model.editDirector(input.directorChangedIndex, new Creator(name, title, year, episodeTitle, episodeNum, 
+						type, credit));
+			}
 		
 	}
 	
@@ -382,8 +498,9 @@ public class Controller {
 			String credit = input.producerEditorCreditField.getText();
 			if(year.isEmpty()) year = "????";
 
-			//TODO pass paramaters into model add Actor
-		}
+			 model.editProducer(input.producerChangedIndex, new Creator(name, title, year, episodeTitle, episodeNum, 
+						type, role, credit));
+					}
 	}
 	
 	private class DeleteListener implements ActionListener{
@@ -399,27 +516,27 @@ public class Controller {
 			for(int i = 0; i < input.buttonList.size(); i++){
 				if(input.buttonList.get(i).isSelected()){
 					if(i == 1){
-						//TODO remove from move list
+						model.deleteMovie(removeIndex);
 						break;
 					}
 					else if(i == 2){
-						//TODO remove from series list
+						model.deleteSeries(removeIndex);
 						break;
 					}
 					else if(i == 3){
-						//TODO remove from Episode list
+						model.deleteEpisode(removeIndex);
 						break;
 					}
 					else if(i == 5){
-						//TODO remove from actor list
+						model.deleteActor(removeIndex);
 						break;
 					}
 					else if(i == 6){
-						//TODO remove from move list
+						model.deleteDirector(removeIndex);
 						break;
 					}
 					else if(i == 7){
-						//TODO remove from producer list
+						model.deleteProducer(removeIndex);
 						break;
 					}
 				}
@@ -442,22 +559,22 @@ public class Controller {
 			}
 			else {
 				if(input.movieButton.isSelected()){
-					//TODO clear Movie
+					model.clearMovies();
 				}
 				else if(input.seriesButton.isSelected()){
-					//TODO clear Series
+					model.clearSeries();
 				}
 				else if(input.episodeButton.isSelected()){
-					//TODO clear episode
+					model.clearEpisodes();
 				}
 				else if(input.actorsButton.isSelected()){
-					//TODO clear Actor
+					model.clearActors();
 				}
 				else if(input.directorsButton.isSelected()){
-					//TODO clear Director
+					model.clearDirectors();
 				}
 				else if(input.producersButton.isSelected()){
-					//TODO clear Producer
+					model.clearProducers();
 				}
 			}
 		}
@@ -465,7 +582,7 @@ public class Controller {
 	private class ClearAllListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent event){
-			//TODO clear all data
+			model.clearAll();
 		}
 	}
 }
